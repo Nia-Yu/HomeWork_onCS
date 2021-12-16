@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HWVariables
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            byte beforeCourseMoney = 0;
+            int currentMoney = -175500;
+            bool happiness = true;
+            string welcome;
+            float dogWeight;
+            ulong humanCount;
+            short gameLevels;
+            char dash;
+            double pNumber;
+            bool roomLight;
+        }
+    }
+}
