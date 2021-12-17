@@ -10,16 +10,16 @@ namespace HWVariables
     {
         static void Main(string[] args)
         {
-            byte beforeCourseMoney = 0;
+            byte quantityOfApples = 0;
             int currentMoney = -175500;
-            bool happiness = true;
+            bool isHappy = true;
+            bool isLightOn;
             string welcome;
             float dogWeight;
-            ulong humanCount;
+            ulong numberOfPeople;
             short gameLevels;
             char dash;
-            double pNumber;
-            bool roomLight;
+            double pNumber = 3.14159265358979323846264338; // это число π
         }
     }
 }
