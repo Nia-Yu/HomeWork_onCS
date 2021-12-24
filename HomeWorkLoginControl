@@ -10,17 +10,18 @@ namespace HWLoginControl
     {
         static void Main(string[] args)
         {
-            string userInput;
+           string userInput; 
+            bool exitСommand = false;
 
-            while (true)
+            while (exitСommand == false)
             {
                 Console.WriteLine("Введите слово: ");
                 userInput = Console.ReadLine();
 
                 if (userInput == "exit")
                 {
-                    Console.WriteLine("Конец программы!");
-                    break;
+                    exitСommand = true;
+                    Console.WriteLine("Конец программы!");                    
                 }
             }
         }
