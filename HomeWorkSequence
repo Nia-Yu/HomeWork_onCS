@@ -12,7 +12,7 @@ namespace HWSequence
         {
             int initialNumber = 7;
 
-            for (int i = initialNumber; i <= 100; i+= initialNumber)
+            for (int i = initialNumber; i <= 98; i+= initialNumber)
             {
                 Console.Write(i + " ");
             }
