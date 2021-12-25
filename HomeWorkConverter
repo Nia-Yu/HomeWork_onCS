@@ -10,11 +10,17 @@ namespace HWConverter
     {
         static void Main(string[] args)
         {
-            float rubToUsd = 74, rubToCad = 56;
-            float usdToRub = 75, usdToCad = 2;
-            float cadToRub = 58, cadToUsd = 3;
-            float rubMoney, cadMoney, usdMoney, currencyCount;
+            float rubMoney;
+            float cadMoney;
+            float usdMoney;
+            float currencyCount;
             string userInput;
+            float rubToUsd = 0.0137f;
+            float rubToCad = 0.0175f;
+            float usdToRub = 73.18f;
+            float usdToCad = 1.28f;
+            float cadToRub = 57.06f;
+            float cadToUsd = 0.779f;
             bool exitСommand = false;
 
             Console.WriteLine("Добро пожаловать в обменник валют. Доступны 3 валюты к обмену.");
@@ -24,8 +30,7 @@ namespace HWConverter
             Console.WriteLine("Введите сколько у вас долларов на счету: ");
             usdMoney = Convert.ToSingle(Console.ReadLine());
             Console.WriteLine("Введите сколько у вас канадских долларов на счету: ");
-            cadMoney = Convert.ToSingle(Console.ReadLine());
-            
+            cadMoney = Convert.ToSingle(Console.ReadLine());            
 
             while (exitСommand == false)
             {
@@ -48,7 +53,7 @@ namespace HWConverter
                         if (rubMoney >= currencyCount)
                         {
                             rubMoney -= currencyCount;
-                            usdMoney += currencyCount / rubToUsd;
+                            usdMoney += currencyCount * rubToUsd;
                         }
                         else
                         {
@@ -76,7 +81,7 @@ namespace HWConverter
                         if (rubMoney >= currencyCount)
                         {
                             rubMoney -= currencyCount;
-                            cadMoney += currencyCount / rubToCad;
+                            cadMoney += currencyCount * rubToCad;
                         }
                         else
                         {
@@ -104,7 +109,7 @@ namespace HWConverter
                         if (usdMoney >= currencyCount)
                         {
                             usdMoney -= currencyCount;
-                            cadMoney += currencyCount / usdToCad;
+                            cadMoney += currencyCount * usdToCad;
                         }
                         else
                         {
