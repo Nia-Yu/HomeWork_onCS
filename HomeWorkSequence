@@ -11,8 +11,9 @@ namespace HWSequence
         static void Main(string[] args)
         {
             int initialNumber = 7;
+            int finiteNumber = 98;
 
-            for (int i = initialNumber; i <= 98; i+= initialNumber)
+            for (int i = initialNumber; i <= finiteNumber; i+= initialNumber)
             {
                 Console.Write(i + " ");
             }
