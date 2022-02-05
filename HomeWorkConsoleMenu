@@ -154,7 +154,7 @@ namespace HWConsoleMenu
                 }
                 else if (commandInput == "WriteRandomNumber")
                 {
-                    int i = rand.Next(0, 100);
+                    int i = random.Next(0, 100);
                     Console.Clear();
                     Console.WriteLine(i);
                 }
