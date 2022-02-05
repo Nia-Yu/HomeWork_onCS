@@ -16,7 +16,7 @@ namespace HWConsoleMenu
             string commandInput;
             string userInput;
             bool exitСommand = false;
-            Random rand = new Random();
+            Random random = new Random();
 
             while (exitСommand == false)
             {
