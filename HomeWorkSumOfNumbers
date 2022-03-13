@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HWSumOfNumbers
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int minRandomValue = 0;
+            int maxRandomValue = 100;
+            int numder;
+            int sumOfNumbers = 0;
+
+            numder = random.Next(minRandomValue, maxRandomValue);
+            Console.WriteLine(numder);
+
+            for (int i = 0; i <= numder; i++)
+            {
+                if ((i >= 0) && ((i%3 == 0) || (i % 5 == 0)))
+                {
+                    sumOfNumbers = sumOfNumbers + i;   
+                }
+            }
+
+            Console.WriteLine(sumOfNumbers);
+        }
+    }
+}
