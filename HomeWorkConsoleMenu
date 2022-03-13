@@ -15,10 +15,12 @@ namespace HWConsoleMenu
             string setPassword = null;
             string commandInput;
             string userInput;
-            bool exitСommand = false;
+            bool clickExit = false;
             Random random = new Random();
+            int minRandomValue = 0;
+            int maxRandomValue = 100;
 
-            while (exitСommand == false)
+            while (clickExit == false)
             {
                 Console.WriteLine("\nСписок команд:\n" +
                    "SetName  - установить имя \n" +
@@ -154,14 +156,14 @@ namespace HWConsoleMenu
                 }
                 else if (commandInput == "WriteRandomNumber")
                 {
-                    int i = random.Next(0, 100);
+                    int i = random.Next(minRandomValue, maxRandomValue);
                     Console.Clear();
                     Console.WriteLine(i);
                 }
                 else if (commandInput == "Esc")
                 {
                     Console.Clear();
-                    exitСommand = true;
+                    clickExit = true;
                     Console.WriteLine("Конец программы!");
                 }
             }
