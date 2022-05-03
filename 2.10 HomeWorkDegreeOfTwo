@@ -14,21 +14,21 @@ namespace HWDegreeOfTwo
             int minRandomValue = 2;
             int maxRandomValue = 20;
             int numder;
-            int numberTwo = 2;
-            int degreeOfTwo = 1;
-            int twoToDegreeOf = 2;
+            int digit = 2;
+            int degreeOfDigit = 1;
+            int digitToDegreeOf = 2;
 
             numder = random.Next(minRandomValue, maxRandomValue);
             Console.WriteLine(numder);
 
-            while (twoToDegreeOf <= numder)
+            while (digitToDegreeOf <= numder)
             {
-                twoToDegreeOf *= numberTwo;
-                degreeOfTwo += 1;
+                digitToDegreeOf *= digit;
+                degreeOfDigit += 1;
             }
             
-            Console.WriteLine(degreeOfTwo);
-            Console.WriteLine(twoToDegreeOf);
+            Console.WriteLine(degreeOfDigit);
+            Console.WriteLine(digitToDegreeOf);
         }
     }
 }
