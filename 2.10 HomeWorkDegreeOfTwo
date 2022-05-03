@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HWDegreeOfTwo
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Random random = new Random();
+            int minRandomValue = 2;
+            int maxRandomValue = 20;
+            int numder;
+            int numberTwo = 2;
+            int degreeOfTwo = 1;
+            int twoToDegreeOf = 2;
+
+            numder = random.Next(minRandomValue, maxRandomValue);
+            Console.WriteLine(numder);
+
+            while (twoToDegreeOf <= numder)
+            {
+                twoToDegreeOf *= numberTwo;
+                degreeOfTwo += 1;
+            }
+            
+            Console.WriteLine(degreeOfTwo);
+            Console.WriteLine(twoToDegreeOf);
+        }
+    }
+}
