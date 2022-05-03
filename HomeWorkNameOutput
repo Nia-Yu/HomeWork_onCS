@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace HWSequence
 {
-    internal class HWNameOutput
+    internal class Program
     {
         static void Main(string[] args)
         {
             string name = "";
+            string stringSymbols = "";
             char userCharacter;
             int nameLengthWithSymbols;
 
@@ -24,15 +25,11 @@ namespace HWSequence
 
             for (int i = 0; i < nameLengthWithSymbols; i++)
             {
-                Console.Write(userCharacter);
+                stringSymbols += userCharacter;
             }
 
-            Console.WriteLine("\n"+ userCharacter + name + userCharacter);
+            Console.WriteLine(stringSymbols + "\n" + userCharacter + name + userCharacter + "\n" + stringSymbols);
 
-            for (int i = 0; i < nameLengthWithSymbols; i++)
-            {
-                Console.Write(userCharacter);
-            }
         }
     }
 }
