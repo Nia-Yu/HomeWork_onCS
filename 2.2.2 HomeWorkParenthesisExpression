@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _170000Courses
+namespace HWParenthesisExpression
 {
-    internal class HWParenthesisExpression
+    internal class Program
     {
         static void Main(string[] args)
         {
@@ -28,7 +28,12 @@ namespace _170000Courses
                 }
                 else if (text[i] == ')')
                 {
-                    if (i != lengthText - 1 && text[i + 1] == ')')
+                    if (exception == 0)
+                    {
+                        Console.WriteLine("Выражение не корректно!");
+                        return;
+                    }
+                    else if (i != lengthText - 1 && text[i + 1] == ')')
                     {
                         count++;
                     }
@@ -41,7 +46,7 @@ namespace _170000Courses
             }
             else
             {
-                Console.WriteLine("Выраженре не корректно!");
+                Console.WriteLine("Выражение не корректно!");
             }
         }
     }
