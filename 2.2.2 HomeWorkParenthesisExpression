@@ -10,7 +10,7 @@ namespace HWParenthesisExpression
             int count = 0;
             int exception = 0;
             int lengthText;
-            int a = 0;
+            int counterBuffer = 0;
 
             // 1( 2( 3( )3 )2 2( 3( )3 )2 )1
             Console.WriteLine("Введите скобочное выражение:");
@@ -41,15 +41,15 @@ namespace HWParenthesisExpression
                         {
                             count++;
                         }                        
-                        if (count > a)
+                        if (count > counterBuffer)
                         {
-                            a = count;
+                            counterBuffer = count;
                         }
                         count = 0;
                     }
-                    if (i == lengthText - 1 && a > count)
+                    if (i == lengthText - 1 && counterBuffer > count)
                     {
-                        count = a;
+                        count = counterBuffer;
                     }
 
                     exception--;
