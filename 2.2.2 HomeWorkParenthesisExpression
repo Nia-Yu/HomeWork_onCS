@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HWParenthesisExpression
 {
@@ -14,7 +10,9 @@ namespace HWParenthesisExpression
             int count = 0;
             int exception = 0;
             int lengthText;
+            int a = 0;
 
+            // 1( 2( 3( )3 )2 2( 3( )3 )2 )1
             Console.WriteLine("Введите скобочное выражение:");
             text = Console.ReadLine();
 
@@ -35,14 +33,28 @@ namespace HWParenthesisExpression
                     }
                     else if (i != lengthText - 1 && text[i + 1] == ')')
                     {
-                        count++;
+                        count++;                        
                     }
+                    else if (i != lengthText - 1 && text[i + 1] == '(')
+                    {
+                        count++;
+                        if (count > a)
+                        {
+                            a = count;
+                        }                        
+                        count = 0;
+                    }
+                    if (i == lengthText - 1 && a > count)
+                    {
+                        count = a;
+                    }
+
                     exception--;
                 }
             }
             if (exception == 0)
             {
-                Console.WriteLine($"Выражение: {text} корректно. \n Максимальная глубина вложенности скобок: {count+1} ");
+                Console.WriteLine($"Выражение: {text} корректно. \n Максимальная глубина вложенности скобок: {count + 1} ");
             }
             else
             {
