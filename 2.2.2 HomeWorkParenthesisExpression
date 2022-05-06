@@ -33,15 +33,15 @@ namespace HWParenthesisExpression
                     }
                     else if (i != lengthText - 1 && text[i + 1] == ')')
                     {
-                        count++;                        
+                        count++;
                     }
-                    else if (i != lengthText - 1 && text[i + 1] == '(')
+                    else if (i != lengthText - 1 && text[i + 1] == '(' && exception != 1)
                     {
                         count++;
                         if (count > a)
                         {
                             a = count;
-                        }                        
+                        }
                         count = 0;
                     }
                     if (i == lengthText - 1 && a > count)
