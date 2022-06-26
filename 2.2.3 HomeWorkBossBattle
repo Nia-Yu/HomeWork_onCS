@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HWBossBattle
 {
@@ -11,9 +7,15 @@ namespace HWBossBattle
         static void Main(string[] args)
         {
             Random random = new Random();
-            float healthBoss = random.Next(150, 300);
-            int damageBoss = random.Next(20, 75);
-            int armoreBoss = random.Next(10, 75);
+            int minHealthBoss = 150;
+            int maxHealthBoss = 300;
+            float healthBoss = random.Next(minHealthBoss, maxHealthBoss);
+            int minDamageBoss = 20;
+            int maxDamageBoss = 75;
+            int damageBoss = random.Next(minDamageBoss, maxDamageBoss);
+            int minArmoreBoss = 10;
+            int maxArmoreBoss = 75;
+            int armoreBoss = random.Next(minArmoreBoss, maxArmoreBoss);
             float healthHero = 250;
             float currentHealthHero = healthHero;
             float damageHero = 2;
@@ -24,7 +26,7 @@ namespace HWBossBattle
             string spell4 = "Огненая стрела";
             float contentSpell1 = 50;
             int contentSpell2 = 2;
-            float contentSpell3 = 15;
+            float contentSpell3 = 20;
             float contentSpell4 = 50;
             float armoreHero = 0;
             int increasedDamage = 1;
@@ -42,7 +44,7 @@ namespace HWBossBattle
                 $"У вас есть 4 заклинания.\n" +
                 $"{spell1} - увеличивает вашу броню на {contentSpell1}%. Можно использовать 1 раз в {usageRoundSpell} раундов. Броня снижается каждый ход на {downgradeArmoreHero}%.\n" +
                 $"{spell2} - увеличивает ваш урон в {contentSpell2} раза, но снижает вашу броню до 0\n" +
-                $"{spell3} - востанавливает здоровье на 20ед.\n" +
+                $"{spell3} - востанавливает здоровье на {contentSpell3} ед.\n" +
                 $"{spell4} - наносит врагу {contentSpell4} ед. урона, можно использовать только после заклинания {spell2}.\n");
 
             Console.WriteLine($"\nВаш враг Элементаль.\n" +
@@ -51,7 +53,7 @@ namespace HWBossBattle
                 $"Урон -  от 0 до {damageBoss}\n" +
                 $"Броня - от 0 до {armoreBoss}");
 
-            while (healthBoss >= 1 && healthHero >= 1) 
+            while (healthBoss >= 1 && healthHero >= 1)
             {
                 if (armoreHero >= downgradeArmoreHero)
                 {
@@ -69,9 +71,10 @@ namespace HWBossBattle
                     $"{spell4}(Быстрая клавиша [4])"); ;
                 spellHero = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
+
                 if (spellHero == 0)
                 {
-                    damage = increasedDamage * (damageHero - (damageHero * armoreBoss/ 100));
+                    damage = increasedDamage * (damageHero - (damageHero * armoreBoss / 100));
                     healthBoss -= damage;
                     Console.WriteLine($"\nВы нанесли урон {damage}.");
                 }
@@ -83,7 +86,7 @@ namespace HWBossBattle
                         Console.WriteLine($"\nВаша броня - {armoreHero}");
                         spell1Used = true;
                     }
-                    else 
+                    else
                     {
                         Console.WriteLine($"Вы не можете прочитать это заклинание. Оно еще активно.\n" +
                             $"Вы пропускаете ход.");
@@ -95,14 +98,14 @@ namespace HWBossBattle
                     {
                         armoreHero = 0;
                         increasedDamage *= contentSpell2;
-                        Console.WriteLine($"\nСледущая ваша атака увеличена в 2 раза.");
+                        Console.WriteLine($"\nСледущая ваша атака увеличена в {contentSpell2} раза.");
                     }
                     else
                     {
                         Console.WriteLine("\nВаша атака не может быть увеличена повторно.");
-                    }                  
-                }                
-                else if (spellHero ==3)
+                    }
+                }
+                else if (spellHero == 3)
                 {
                     if (currentHealthHero < healthHero)
                     {
@@ -116,7 +119,7 @@ namespace HWBossBattle
                             currentHealthHero += contentSpell3;
                             Console.WriteLine($"\nЗдоровье востановлено на {contentSpell3}. Ваше текущее здоровье {currentHealthHero}.");
                         }
-                    }                    
+                    }
                 }
                 else if (spellHero == 4)
                 {
@@ -143,27 +146,20 @@ namespace HWBossBattle
                     else
                     {
                         usageRoundSpell1 += 1;
-
                     }
                 }
-                
-                if (healthBoss <= 0)
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("\nХод противника");
-                    armoreBoss = random.Next(1, armoreBoss);
-                    damage = (damageBoss - (damageBoss * armoreHero) / 100);
-                    healthHero -= damage;
-                    Console.WriteLine($"\nВам нанесен урон {damage}.");
-                }
+
+                Console.WriteLine("\nХод противника");
+                armoreBoss = random.Next(0, armoreBoss);
+                damage = (damageBoss - (damageBoss * armoreHero) / 100);
+                healthHero -= damage;
+                Console.WriteLine($"\nВам нанесен урон {damage}.");
                 Console.WriteLine($"\nВаши характеристики:\n" +
                     $"Здоровье - {healthHero}\n" +
                     $"Урон -  {damageHero}\n" +
                     $"Броня - {armoreHero}% \n" +
                     $"Увеличение атаки - х{increasedDamage}");
+
                 if (spell1Used == false)
                 {
                     Console.WriteLine($"Заклинание {spell1} доступно.");
@@ -179,7 +175,12 @@ namespace HWBossBattle
             }
 
             Console.WriteLine("\nБой окончен.");
-            if (healthHero <=0)
+
+            if (healthHero <= 0 && healthBoss <= 0)
+            {
+                Console.WriteLine("Ваш герой и Элементаль нанесли последний удар одновременно. Они оба мертвы.");
+            }
+            else if (healthHero <= 0)
             {
                 Console.WriteLine("Ваш герой мертв.");
             }
