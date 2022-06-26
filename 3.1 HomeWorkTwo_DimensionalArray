@@ -1,0 +1,34 @@
+using System;
+
+namespace HWTwo_DimensionalArray
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[,] arroy = { { 2, 5, 4, 8, 6 }, { 1, 5, 7, 8, 9 }, { 8, 4, 6, 7, 8 } };
+            int sum = 0;
+            int multiplication = 1;
+
+            for (int i = 0; i < arroy.GetLength(0); i++)
+            {
+                for (int j = 0; j < arroy.GetLength(1); j++)
+                {
+                    Console.Write($"{arroy[i, j]} ");
+                    if (i == 1)
+                    {
+                        sum += arroy[i, j];
+                    }
+                    if (j == 0)
+                    {
+                        multiplication *= arroy[i, j];
+                    }
+                }
+                Console.WriteLine();
+
+            }
+            Console.WriteLine(sum);
+            Console.WriteLine(multiplication);
+        }
+    }
+}
