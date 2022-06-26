@@ -6,22 +6,22 @@ namespace HWTwo_DimensionalArray
     {
         static void Main(string[] args)
         {
-            int[,] arroy = { { 2, 5, 4, 8, 6 }, { 1, 5, 7, 8, 9 }, { 8, 4, 6, 7, 8 } };
+            int[,] array = { { 2, 5, 4, 8, 6 }, { 1, 5, 7, 8, 9 }, { 8, 4, 6, 7, 8 } };
             int sum = 0;
             int multiplication = 1;
 
-            for (int i = 0; i < arroy.GetLength(0); i++)
+            for (int i = 0; i < array.GetLength(0); i++)
             {
-                for (int j = 0; j < arroy.GetLength(1); j++)
+                for (int j = 0; j < array.GetLength(1); j++)
                 {
-                    Console.Write($"{arroy[i, j]} ");
+                    Console.Write($"{array[i, j]} ");
                     if (i == 1)
                     {
-                        sum += arroy[i, j];
+                        sum += array[i, j];
                     }
                     if (j == 0)
                     {
-                        multiplication *= arroy[i, j];
+                        multiplication *= array[i, j];
                     }
                 }
                 Console.WriteLine();
