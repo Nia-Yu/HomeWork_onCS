@@ -1,8 +1,8 @@
 using System;
 
-namespace HWTwo_DimensionalArray
+namespace HWMaxElement
 {
-    internal class HWMaxElement
+    internal class Program
     {
         static void Main(string[] args)
         {
