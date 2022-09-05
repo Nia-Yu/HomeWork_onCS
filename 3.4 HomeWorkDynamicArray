@@ -1,0 +1,52 @@
+using System;
+
+namespace HWDynamicArray
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int lengthArray = 0;
+            int[] array = new int[lengthArray];
+            int number;
+            int arraySum = 0;
+
+            while (true)
+            {
+                Console.WriteLine($"Введите число, exit или sum: ");
+                string message = Console.ReadLine();
+
+                if (message != "sum" && message != "exit")
+                {
+                    number = Convert.ToInt32(message);
+                    lengthArray += 1;
+
+                    int[] tempArray = new int[lengthArray];
+                    for(int i = 0; i < array.Length; i++)
+                    {
+                        tempArray[i] = array[i];
+                    }
+
+                    tempArray[lengthArray - 1] = number;
+                    array = tempArray;
+                }
+
+                else if (message == "sum")
+                {
+                    for (int i = 0; i < array.Length; i++)
+                        arraySum += array[i];
+                    Console.WriteLine($"Сумма массива: {arraySum} ");
+                    arraySum = 0;
+                }
+
+
+                else if (message == "exit")
+                {
+                    break;
+                }
+
+                else Console.WriteLine($"Такой команды нет");
+            }
+        }
+    }
+}
