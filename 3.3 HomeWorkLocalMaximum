@@ -20,24 +20,26 @@ namespace HWLocalMaximum
 
             Console.WriteLine();
 
-            if (array[0] > array[1] || array[array.Length - 1] > array[array.Length - 2])
+            if (array[0] > array[1])
             {
                 localMax = array[0];
                 Console.WriteLine(localMax);
             }
-            for (int i = 0; i < array.Length; i++)
-            {
-                if (i > 0 && i != array.Length - 1)
-                {
-                    if (array[i] > array[i + 1] && array[i] > array[i - 1])
-                    {
-                        localMax = array[i];
-                        Console.WriteLine(localMax);
-                    }
-                }
 
+            for (int i = 1; i < array.Length - 1; i++)
+            {
+                if (array[i] > array[i + 1] && array[i] > array[i - 1])
+                {
+                    localMax = array[i];
+                    Console.WriteLine(localMax);
+                }
             }
 
+            if (array[array.Length - 1] > array[array.Length - 2])
+            {
+                localMax = array[array.Length - 1];
+                Console.WriteLine(localMax);
+            }
         }
     }
 }
