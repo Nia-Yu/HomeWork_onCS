@@ -1,0 +1,52 @@
+using System;
+
+namespace HWLocalMaximum
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] array = new int[30];
+            Random random = new Random();
+            int minMeaningRamdom = 0;
+            int maxMeaningRamdom = 9;
+            int localMax;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = random.Next(minMeaningRamdom, maxMeaningRamdom);
+                Console.Write($"{array[i]} ");
+            }
+
+            Console.WriteLine();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (i == 0)
+                {
+                    if (array[i] > array[i + 1])
+                    {
+                        localMax = array[i];
+                        Console.WriteLine(localMax);
+                    }
+                }
+                else if (i > 0 && i != array.Length - 1)
+                {
+                    if (array[i] > array[i + 1] && array[i] > array[i - 1])
+                    {
+                        localMax = array[i];
+                        Console.WriteLine(localMax);
+                    }
+                }
+                else
+                {
+                    if (array[i] > array[i - 1])
+                    {
+                        localMax = array[i];
+                        Console.WriteLine(localMax);
+                    }
+                }
+            }
+        }
+    }
+}
