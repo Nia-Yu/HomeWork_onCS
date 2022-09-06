@@ -15,7 +15,7 @@ namespace HWDynamicArray
 
             while (message != messageExit)
             {
-                Console.WriteLine($"Введите число, exit или sum: ");
+                Console.WriteLine($"Введите число, {messageExit} или {messageSum}: ");
                 message = Console.ReadLine();
 
                 if (message != messageSum && message != messageExit)
