@@ -9,15 +9,17 @@ namespace HWDynamicArray
             int lengthArray = 0;
             int[] array = new int[lengthArray];
             int number;
-            int arraySum = 0;
-            bool clickExit = false;
+            //bool clickExit = false;
+            string message = "";
+            string messageSum = "sum";
+            string messageExit = "exit";
 
-            while (clickExit == false)
+            while (message != messageExit)
             {
                 Console.WriteLine($"Введите число, exit или sum: ");
-                string message = Console.ReadLine();
+                message = Console.ReadLine();
 
-                if (message != "sum" && message != "exit")
+                if (message != messageSum && message != messageExit)
                 {
                     number = Convert.ToInt32(message);
                     lengthArray += 1;
@@ -31,9 +33,9 @@ namespace HWDynamicArray
                     tempArray[lengthArray - 1] = number;
                     array = tempArray;
                 }
-                else if (message == "sum")
+                else if (message == messageSum)
                 {
-                    arraySum = 0;
+                    int arraySum = 0;
 
                     for (int i = 0; i < array.Length; i++)
                     {
@@ -42,16 +44,8 @@ namespace HWDynamicArray
 
                     Console.WriteLine($"Сумма массива: {arraySum} ");
                 }
-                else if (message == "exit")
-                {
-                    Console.Clear();
-                    clickExit = true;
-                    Console.WriteLine("Конец программы!");
-                }
-                else
-                {
-                    Console.WriteLine($"Такой команды нет");
-                }
+                Console.Clear();
+                Console.WriteLine("Конец программы!");
             }
         }
     }
