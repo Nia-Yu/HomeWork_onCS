@@ -9,7 +9,6 @@ namespace HWDynamicArray
             int lengthArray = 0;
             int[] array = new int[lengthArray];
             int number;
-            //bool clickExit = false;
             string message = "";
             string messageSum = "sum";
             string messageExit = "exit";
@@ -44,9 +43,9 @@ namespace HWDynamicArray
 
                     Console.WriteLine($"Сумма массива: {arraySum} ");
                 }
-                Console.Clear();
-                Console.WriteLine("Конец программы!");
             }
+            Console.Clear();
+            Console.WriteLine("Конец программы!");
         }
     }
 }
