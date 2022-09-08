@@ -8,7 +8,7 @@ namespace HWSubarrayrRepetitions
         {
             int[] array = new int[30];
             Random random = new Random();
-            int minMeaningRamdom = 7;
+            int minMeaningRamdom = 8;
             int maxMeaningRamdom = 10;
             int repeatNumber = 0;
             int numberRepetitions = 0;
@@ -31,7 +31,11 @@ namespace HWSubarrayrRepetitions
                 else if (numberRepetitions < quantity)
                 {
                     numberRepetitions = quantity;
-                    repeatNumber = array[i - 1];
+                    repeatNumber = array[i-1];
+                    quantity = 1;
+                }
+                else
+                {
                     quantity = 1;
                 }
             }
