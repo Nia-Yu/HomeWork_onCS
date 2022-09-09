@@ -7,7 +7,7 @@ namespace HWArrayShift
         static void Main(string[] args)
         {
             int[] array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-            int Length = array.Length;
+            int lengthArray = array.Length;
             int numberShifts = 0;
 
             Console.WriteLine("Исходный массив");
@@ -24,11 +24,12 @@ namespace HWArrayShift
             {
                 int firstNumber = array[0];
 
-                for (int j = 0; j < Length-1; j++)
+                for (int j = 0; j < lengthArray - 1; j++)
                 {
                     array[j] = array[j+1];
                 }
-                array[Length-1] = firstNumber;
+
+                array[lengthArray - 1] = firstNumber;
             }
 
             Console.WriteLine("Новый массив");
