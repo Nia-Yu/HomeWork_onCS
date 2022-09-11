@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HWReadint
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string number;
+            int convert = 0;
+            bool isCheckCompleted = false;
+
+            while (isCheckCompleted == false)
+            {
+                Console.Write("Введите число: ");
+                number = Console.ReadLine();
+                isCheckCompleted = int.TryParse(number, out convert);
+                if (isCheckCompleted)
+                {
+                    Console.WriteLine(convert);
+                }
+                else
+                {
+                    Console.WriteLine("Не удалось преобразовать.");
+                }
+            }
+        }
+    }
+}
