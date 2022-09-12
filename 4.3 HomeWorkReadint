@@ -10,6 +10,11 @@ namespace HWReadint
     {
         static void Main(string[] args)
         {
+            Readint();
+        }
+
+        static int Readint()
+        {
             string number;
             int convert = 0;
             bool isCheckCompleted = false;
@@ -28,6 +33,8 @@ namespace HWReadint
                     Console.WriteLine("Не удалось преобразовать.");
                 }
             }
+
+            return convert;
         }
     }
 }
