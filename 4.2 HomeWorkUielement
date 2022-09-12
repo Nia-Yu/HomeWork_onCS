@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HWUielement
 {
@@ -10,26 +6,28 @@ namespace HWUielement
     {
         static void Main(string[] args)
         {
-            int helth;
+            int health;
             int maxValueBar = 10;
             int mana;
-            char symbolHelth;
+            char symbolHealth;
             char symbolMana;
+            int minValuePercentage = 0;
+            int maxValuePercentage = 100;
 
             Console.Write("Введите символ для хелфбара: ");
-            symbolHelth = Convert.ToChar(Console.ReadLine());
+            symbolHealth = Convert.ToChar(Console.ReadLine());
 
-            Console.Write("Введите процент текущего здоровья (от 0 до 100): ");
-            helth = Convert.ToInt32(Console.ReadLine());
+            Console.Write($"Введите процент текущего здоровья (от {minValuePercentage} до {maxValuePercentage}): ");
+            health = Convert.ToInt32(Console.ReadLine());
 
             Console.Write("Введите символ для манабара: ");
             symbolMana = Convert.ToChar(Console.ReadLine());
 
-            Console.Write("Введите процент текущей маны(от 0 до 100): ");
+            Console.Write($"Введите процент текущей маны (от {minValuePercentage} до {maxValuePercentage}): ");
             mana = Convert.ToInt32(Console.ReadLine());
 
             Console.Clear();
-            DrawBar(helth, maxValueBar, 0, symbolHelth);
+            DrawBar(health, maxValueBar, 0, symbolMana);
             DrawBar(mana, maxValueBar, 1, symbolMana);
         }
 
