@@ -10,21 +10,22 @@ namespace HWReadint
     {
         static void Main(string[] args)
         {
-            Readint();
+            ReadInt();
         }
 
-        static int Readint()
+        static int ReadInt()
         {
             string number;
             int convert = 0;
-            bool isCheckCompleted = false;
+            bool isNumber = false;
 
-            while (isCheckCompleted == false)
+            while (isNumber == false)
             {
                 Console.Write("Введите число: ");
                 number = Console.ReadLine();
-                isCheckCompleted = int.TryParse(number, out convert);
-                if (isCheckCompleted)
+                isNumber = int.TryParse(number, out convert);
+
+                if (isNumber)
                 {
                     Console.WriteLine(convert);
                 }
