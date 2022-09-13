@@ -1,0 +1,93 @@
+using System;
+
+namespace HMBraveNewWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.CursorVisible = false;
+
+            int sumHeart = 0;
+            bool isPlaing = true;
+            char[,] map =
+             {
+                {'#',' ','#','#','#','#','#','#','#','#','#','#','#','#','#' },
+                {'#',' ','#','♥','#','#',' ','#',' ','#','#','♥',' ','#','#' },
+                {'#',' ',' ',' ',' ',' ','#',' ',' ',' ','#','#',' ','♥','#' },
+                {'#','#',' ','#','#',' ','#',' ','#',' ',' ',' ',' ','#','#' },
+                {'#',' ',' ','♥','#',' ',' ',' ','#',' ','♥','#',' ',' ','#' },
+                {'#','#',' ',' ','#','♥','#','♥',' ','#','#','#',' ',' ','#' },
+                {'#',' ',' ','#',' ','#',' ',' ',' ',' ',' ','#',' ','#','#' },
+                {'#','♥','#',' ','#','♥',' ','#','♥','#',' ',' ',' ',' ','#' },
+                {'#',' ',' ','#','♥','#',' ','♥','#',' ','♥','#','#',' ','#' },
+                {'#','#',' ',' ',' ',' ',' ','#',' ',' ','#','#','#','♥','#' },
+                {'#',' ','#','#',' ','♥','#',' ',' ',' ',' ',' ',' ','#','#' },
+                {'#','♥',' ',' ',' ','#','#',' ','#',' ','♥','#',' ',' ','#' },
+                {'#','#','#','#','#','#','#','#','#','#','#','#','#','_','#' },
+            };
+            
+            Console.SetCursorPosition(0, 15);
+            Console.WriteLine("Пройди лабиринт! Собери как можно больше ♥");
+            Console.SetCursorPosition(0, 0);
+            int userX = 1, userY = 0;
+
+            while (isPlaing)
+            {
+                DrawMap(map);
+
+                Console.SetCursorPosition(userX, userY);
+                Console.Write('☻');
+
+                ConsoleKeyInfo charKey = Console.ReadKey();
+
+                switch (charKey.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (map[userY - 1, userX] != '#')
+                            userY--;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (map[userY + 1, userX] != '#')
+                            userY++;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (map[userY, userX - 1] != '#')
+                            userX--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (map[userY, userX + 1] != '#')
+                            userX++;
+                        break;
+                }
+
+                if (map[userY, userX] == '♥')
+                {
+                    map[userY, userX] = ' ';
+
+                    sumHeart += 1;
+                }
+                else if (map[userY, userX] == '_')
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} ♥");
+                    isPlaing = false;
+                }
+            }
+        }
+        static void DrawMap(char[,] map)
+        {
+            Console.SetCursorPosition(0, 0);
+
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    Console.Write(map[i, j]);
+                }
+
+                Console.WriteLine();
+            }
+        }
+    }
+}
