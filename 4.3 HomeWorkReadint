@@ -10,32 +10,28 @@ namespace HWReadint
     {
         static void Main(string[] args)
         {
-            ReadInt();
+            Console.WriteLine(ReadInt());
         }
 
         static int ReadInt()
         {
             string number;
-            int convert = 0;
+            int convertNumber = 0;
             bool isNumber = false;
 
             while (isNumber == false)
             {
                 Console.Write("Введите число: ");
                 number = Console.ReadLine();
-                isNumber = int.TryParse(number, out convert);
+                isNumber = int.TryParse(number, out convertNumber);
 
-                if (isNumber)
-                {
-                    Console.WriteLine(convert);
-                }
-                else
+                if (!isNumber)
                 {
                     Console.WriteLine("Не удалось преобразовать.");
                 }
             }
 
-            return convert;
+            return convertNumber;
         }
     }
 }
