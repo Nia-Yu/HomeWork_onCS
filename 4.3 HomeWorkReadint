@@ -25,7 +25,7 @@ namespace HWReadint
                 number = Console.ReadLine();
                 isNumber = int.TryParse(number, out convertNumber);
 
-                if (!isNumber)
+                if (isNumber == false)
                 {
                     Console.WriteLine("Не удалось преобразовать.");
                 }
