@@ -1,3 +1,4 @@
+
 using System;
 
 namespace HMBraveNewWorld
@@ -26,48 +27,28 @@ namespace HMBraveNewWorld
                 {'#','♥',' ',' ',' ','#','#',' ','#',' ','♥','#',' ',' ','#' },
                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','_','#' },
             };
-            
+
             Console.SetCursorPosition(0, 15);
             Console.WriteLine("Пройди лабиринт! Собери как можно больше ♥");
             Console.SetCursorPosition(0, 0);
-            int userX = 1, userY = 0;
+            int userPositionX = 1;
+            int userPositionY = 0;
 
             while (isPlaing)
             {
                 DrawMap(map);
 
-                Console.SetCursorPosition(userX, userY);
-                Console.Write('☻');
+                DrawPlayer(userPositionX, userPositionY);
 
-                ConsoleKeyInfo charKey = Console.ReadKey();
+                MovePlayer(map, userPositionY, userPositionX);
 
-                switch (charKey.Key)
+                if (map[userPositionY, userPositionX] == '♥')
                 {
-                    case ConsoleKey.UpArrow:
-                        if (map[userY - 1, userX] != '#')
-                            userY--;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (map[userY + 1, userX] != '#')
-                            userY++;
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (map[userY, userX - 1] != '#')
-                            userX--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (map[userY, userX + 1] != '#')
-                            userX++;
-                        break;
-                }
-
-                if (map[userY, userX] == '♥')
-                {
-                    map[userY, userX] = ' ';
+                    map[userPositionY, userPositionX] = ' ';
 
                     sumHeart += 1;
                 }
-                else if (map[userY, userX] == '_')
+                else if (map[userPositionY, userPositionX] == '_')
                 {
                     Console.Clear();
                     Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} ♥");
@@ -75,6 +56,60 @@ namespace HMBraveNewWorld
                 }
             }
         }
+
+        static void MovePlayer(char[,] map, int userPositionY, int userPositionX)
+        {
+            ConsoleKeyInfo charKey = Console.ReadKey();
+
+            switch (charKey.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    MoveUp(map, userPositionY, userPositionX);
+                    break;
+                case ConsoleKey.DownArrow:
+                    MoveDown(map, userPositionY, userPositionX);
+                    break;
+                case ConsoleKey.LeftArrow:
+                    MoveLeft(map, userPositionY, userPositionX);
+                    break;
+                case ConsoleKey.RightArrow:
+                    MoveRight(map, userPositionY, userPositionX);
+                    break;
+            }
+        }
+
+        static void MoveUp(char[,] map, int userPositionY, int userPositionX)
+        {
+            if (map[userPositionY - 1, userPositionX] != '#')
+            {
+                userPositionY--;
+            }
+        }
+
+        static void MoveDown(char[,] map, int userPositionY, int userPositionX)
+        {
+            if (map[userPositionY + 1, userPositionX] != '#')
+            {
+                userPositionY++;
+            }
+        }
+
+        static void MoveLeft(char[,] map, int userPositionY, int userPositionX)
+        {
+            if (map[userPositionY, userPositionX - 1] != '#')
+            {
+                userPositionX--;
+            }
+        }
+
+        static void MoveRight(char[,] map, int userPositionY, int userPositionX)
+        {
+            if (map[userPositionY, userPositionX + 1] != '#')
+            {
+                userPositionX++;
+            }                
+        }
+
         static void DrawMap(char[,] map)
         {
             Console.SetCursorPosition(0, 0);
@@ -88,6 +123,12 @@ namespace HMBraveNewWorld
 
                 Console.WriteLine();
             }
+        }
+
+        static void DrawPlayer(int userPositionX, int userPositionY)
+        {
+            Console.SetCursorPosition(userPositionX, userPositionY);
+            Console.Write('☻');
         }
     }
 }
