@@ -9,7 +9,7 @@ namespace HWShuffle
             int[] array = new int[9];
 
             FillArray(array);
-            Console.WriteLine("Исходный массив");
+            Console.WriteLine("Начальный массив");
             OutputArray(array);
 
             ShuffleArray(array);
