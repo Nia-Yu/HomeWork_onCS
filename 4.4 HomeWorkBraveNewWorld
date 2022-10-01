@@ -1,5 +1,5 @@
-
 using System;
+using System.IO;
 
 namespace HMBraveNewWorld
 {
@@ -40,74 +40,52 @@ namespace HMBraveNewWorld
 
                 DrawPlayer(userPositionX, userPositionY);
 
-                MovePlayer(map, userPositionY, userPositionX);
+                MovePlayer(map, ref userPositionY, ref userPositionX);
 
-                if (map[userPositionY, userPositionX] == '♥')
-                {
-                    map[userPositionY, userPositionX] = ' ';
-
-                    sumHeart += 1;
-                }
-                else if (map[userPositionY, userPositionX] == '_')
-                {
-                    Console.Clear();
-                    Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} ♥");
-                    isPlaing = false;
-                }
+                CheckingPoints(map, ref userPositionY, ref userPositionX, ref sumHeart, ref isPlaing);
             }
         }
 
-        static void MovePlayer(char[,] map, int userPositionY, int userPositionX)
+        static void CheckingPoints(char[,] map, ref int userPositionY, ref int userPositionX, ref int sumHeart, ref bool isPlaing)
         {
-            ConsoleKeyInfo charKey = Console.ReadKey();
-
-            switch (charKey.Key)
+            if (map[userPositionY, userPositionX] == '♥')
             {
-                case ConsoleKey.UpArrow:
-                    MoveUp(map, userPositionY, userPositionX);
-                    break;
-                case ConsoleKey.DownArrow:
-                    MoveDown(map, userPositionY, userPositionX);
-                    break;
-                case ConsoleKey.LeftArrow:
-                    MoveLeft(map, userPositionY, userPositionX);
-                    break;
-                case ConsoleKey.RightArrow:
-                    MoveRight(map, userPositionY, userPositionX);
-                    break;
+                map[userPositionY, userPositionX] = ' ';
+
+                sumHeart += 1;
+            }
+            else if (map[userPositionY, userPositionX] == '_')
+            {
+                Console.Clear();
+                Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} ♥");
+                isPlaing = false;
             }
         }
 
-        static void MoveUp(char[,] map, int userPositionY, int userPositionX)
+        static void MovePlayer(char[,] map, ref int userPositionY, ref int userPositionX)
         {
-            if (map[userPositionY - 1, userPositionX] != '#')
+            ConsoleKeyInfo direction = Console.ReadKey();
+
+            if (direction.Key == ConsoleKey.UpArrow && map[userPositionY - 1, userPositionX] != '#')
             {
+                map[userPositionY, userPositionX] = ' ';
                 userPositionY--;
             }
-        }
-
-        static void MoveDown(char[,] map, int userPositionY, int userPositionX)
-        {
-            if (map[userPositionY + 1, userPositionX] != '#')
+            else if (direction.Key == ConsoleKey.DownArrow && map[userPositionY + 1, userPositionX] != '#')
             {
+                map[userPositionY, userPositionX] = ' ';
                 userPositionY++;
             }
-        }
-
-        static void MoveLeft(char[,] map, int userPositionY, int userPositionX)
-        {
-            if (map[userPositionY, userPositionX - 1] != '#')
+            else if (direction.Key == ConsoleKey.LeftArrow && map[userPositionY, userPositionX - 1] != '#')
             {
+                map[userPositionY, userPositionX] = ' ';
                 userPositionX--;
             }
-        }
-
-        static void MoveRight(char[,] map, int userPositionY, int userPositionX)
-        {
-            if (map[userPositionY, userPositionX + 1] != '#')
+            else if (direction.Key == ConsoleKey.RightArrow && map[userPositionY, userPositionX + 1] != '#')
             {
+                map[userPositionY, userPositionX] = ' ';
                 userPositionX++;
-            }                
+            }
         }
 
         static void DrawMap(char[,] map)
