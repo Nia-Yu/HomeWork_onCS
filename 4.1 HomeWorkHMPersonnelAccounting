@@ -1,0 +1,160 @@
+using System;
+using System.Xml.Linq;
+
+namespace HMPersonnelAccounting
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] listFullName = new string[0];
+            string[] listPosts = new string[0];
+            bool clickExit = true;
+
+            while (clickExit == true)
+            {
+                Console.WriteLine("\nСписок команд:\n" +
+                   "1  - добавить досье\n" +
+                   "2 – вывести все досье\n" +
+                   "3 – удалить досье\n" +
+                   "4 - поиск по фамилиии\n" +
+                   "5 – выход");
+                Console.WriteLine("Введите команду: ");
+                string commandInput = Console.ReadLine();
+
+                switch (commandInput)
+                {
+                    case "1":
+                        CreateDossier(ref listFullName, ref listPosts);
+                        break;
+                    case "2":
+                        OutputDossier(listFullName, listPosts);
+                        break;
+                    case "3":
+                        DeleteDossier(ref listFullName, ref listPosts);
+                        break;
+                    case "4":
+                        SearchDossier(listFullName, listPosts);
+                        break;
+                    case "5":
+                        clickExit = false;
+                        break;
+                }
+            }
+        }
+
+        static void CreateDossier(ref string[] listFullName, ref string[] listPosts)
+        {
+            Console.WriteLine("\nВведите ФИО: \n");
+            ExpandArray(ref listFullName);
+            Console.WriteLine("\nВведите должность: \n");
+            ExpandArray(ref listPosts);
+
+            Console.WriteLine("\nДосье добавлены!");
+        }
+
+        static void ExpandArray(ref string[] array)
+        {
+            string[] tempArray = new string[array.Length + 1];
+            string userInput = Console.ReadLine();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                tempArray[i] = array[i];
+            }
+
+            tempArray[tempArray.Length - 1] = userInput;
+            array = tempArray;
+        }
+
+        static void OutputDossier(string[] listFullName, string[] listPosts)
+        {
+            if (listFullName.Length != 0)
+            {
+                for (int i = 0; i < listFullName.Length; i++)
+                {
+                    Console.WriteLine($"{i}){listFullName[i]}-{listPosts[i]}");
+                }
+            }
+            else 
+            {
+                Console.WriteLine("Ни одного досье еще не внесено");
+            }
+        }
+
+        static void DeleteDossier(ref string[] listFullName, ref string[] listPosts)
+        {
+            if (listFullName.Length != 0)
+            {
+                Console.WriteLine("\nВведите номер досье для удаления: \n");
+                int numberDelete = int.Parse(Console.ReadLine());
+                ReduceArray(numberDelete, ref listFullName);
+                ReduceArray(numberDelete, ref listPosts);
+
+                Console.WriteLine("\nДанные удалены!");
+            }
+            else
+            {
+                Console.WriteLine("\nТакого досье нет!\n");
+            }
+        }
+
+        static void ReduceArray(int numberDelete, ref string[] array)
+        {
+            if (array.Length != 0)
+            {
+                string[] tempArray = new string[array.Length - 1];
+                int position = 0;
+
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (i != (numberDelete))
+                    {
+                        tempArray[position] = array[i];
+                        position++;
+                    }
+                }
+
+                array = tempArray;
+
+            }
+            else
+            {
+                Console.WriteLine("\nВ досье ещё нет данных\n");
+            }
+        }
+
+        static void SearchDossier(string[] listFullName, string[] listPosts)
+        {
+            if (listFullName.Length != 0)
+            {
+                Console.WriteLine("\nВведите ФИО: \n");
+                string fullNameSearch = Console.ReadLine();
+                bool isFound = false;
+                bool isNotFound = true;
+
+                for (int i = 0; i < listFullName.Length; i++)
+                {
+                    if (listFullName[i] == fullNameSearch)
+                    {
+                        if (isFound == false)
+                        {
+                            Console.WriteLine("\nНайдено: \n");
+                            isFound = true;
+                        }
+                        Console.WriteLine($"{i + 1}. {listFullName[i]}-{listPosts[i]}");
+                        isNotFound = false;
+                    }
+                }
+                if (isNotFound == true)
+                {
+                    Console.WriteLine("\nФИО не найдено\n");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\nНет досье\n");
+            }
+        }
+    }
+}
