@@ -68,22 +68,18 @@ namespace HMBraveNewWorld
 
             if (direction.Key == ConsoleKey.UpArrow && map[userPositionY - 1, userPositionX] != '#')
             {
-                map[userPositionY, userPositionX] = ' ';
                 userPositionY--;
             }
             else if (direction.Key == ConsoleKey.DownArrow && map[userPositionY + 1, userPositionX] != '#')
             {
-                map[userPositionY, userPositionX] = ' ';
                 userPositionY++;
             }
             else if (direction.Key == ConsoleKey.LeftArrow && map[userPositionY, userPositionX - 1] != '#')
             {
-                map[userPositionY, userPositionX] = ' ';
                 userPositionX--;
             }
             else if (direction.Key == ConsoleKey.RightArrow && map[userPositionY, userPositionX + 1] != '#')
             {
-                map[userPositionY, userPositionX] = ' ';
                 userPositionX++;
             }
         }
