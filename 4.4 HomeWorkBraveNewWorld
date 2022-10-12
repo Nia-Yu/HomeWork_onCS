@@ -11,6 +11,7 @@ namespace HMBraveNewWorld
 
             int sumHeart = 0;
             bool isPlaing = true;
+            char symbolHeart = '♥';
             char[,] map =
              {
                 {'#',' ','#','#','#','#','#','#','#','#','#','#','#','#','#' },
@@ -29,7 +30,7 @@ namespace HMBraveNewWorld
             };
 
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine("Пройди лабиринт! Собери как можно больше ♥");
+            Console.WriteLine($"Пройди лабиринт! Собери как можно больше {symbolHeart}");
             Console.SetCursorPosition(0, 0);
             int userPositionX = 1;
             int userPositionY = 0;
@@ -42,43 +43,50 @@ namespace HMBraveNewWorld
 
                 MovePlayer(map, ref userPositionY, ref userPositionX);
 
-                CheckingPoints(map, ref userPositionY, ref userPositionX, ref sumHeart, ref isPlaing);
+                ToCheckingPoints(map, ref userPositionY, ref userPositionX, ref sumHeart, ref isPlaing, symbolHeart);
             }
         }
 
-        static void CheckingPoints(char[,] map, ref int userPositionY, ref int userPositionX, ref int sumHeart, ref bool isPlaing)
+        static void ToCheckingPoints(char[,] map, ref int userPositionY, ref int userPositionX, ref int sumHeart, ref bool isPlaing, char symbolHeart)
         {
-            if (map[userPositionY, userPositionX] == '♥')
+            char symbolEndGame = '_';
+
+            if (map[userPositionY, userPositionX] == symbolHeart)
             {
                 map[userPositionY, userPositionX] = ' ';
 
                 sumHeart += 1;
             }
-            else if (map[userPositionY, userPositionX] == '_')
+            else if (map[userPositionY, userPositionX] == symbolEndGame)
             {
                 Console.Clear();
-                Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} ♥");
+                Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} {symbolHeart}");
                 isPlaing = false;
             }
         }
 
         static void MovePlayer(char[,] map, ref int userPositionY, ref int userPositionX)
         {
+            char symbolWall = '#';
             ConsoleKeyInfo direction = Console.ReadKey();
+            ConsoleKey directionUp = ConsoleKey.UpArrow;
+            ConsoleKey directionDown = ConsoleKey.DownArrow;
+            ConsoleKey directionLeft = ConsoleKey.LeftArrow;
+            ConsoleKey directionRight = ConsoleKey.RightArrow;
 
-            if (direction.Key == ConsoleKey.UpArrow && map[userPositionY - 1, userPositionX] != '#')
+            if (direction.Key == directionUp && map[userPositionY - 1, userPositionX] != symbolWall)
             {
                 userPositionY--;
             }
-            else if (direction.Key == ConsoleKey.DownArrow && map[userPositionY + 1, userPositionX] != '#')
+            else if (direction.Key == directionDown && map[userPositionY + 1, userPositionX] != symbolWall)
             {
                 userPositionY++;
             }
-            else if (direction.Key == ConsoleKey.LeftArrow && map[userPositionY, userPositionX - 1] != '#')
+            else if (direction.Key == directionLeft && map[userPositionY, userPositionX - 1] != symbolWall)
             {
                 userPositionX--;
             }
-            else if (direction.Key == ConsoleKey.RightArrow && map[userPositionY, userPositionX + 1] != '#')
+            else if (direction.Key == directionRight && map[userPositionY, userPositionX + 1] != symbolWall)
             {
                 userPositionX++;
             }
@@ -101,8 +109,9 @@ namespace HMBraveNewWorld
 
         static void DrawPlayer(int userPositionX, int userPositionY)
         {
+            string user = "☻";
             Console.SetCursorPosition(userPositionX, userPositionY);
-            Console.Write('☻');
+            Console.Write(user);
         }
     }
 }
