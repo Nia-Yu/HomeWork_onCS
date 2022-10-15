@@ -8,8 +8,6 @@ namespace HMPersonnelAccounting2
         static void Main(string[] args)
         {
             Dictionary<string, string> dossiers = new Dictionary<string, string>();
-            //string[] surnames = new string[0];
-            //string[] posts = new string[0];
             bool isWork = true;
 
             while (isWork)
