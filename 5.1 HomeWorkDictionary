@@ -27,7 +27,6 @@ namespace HMDictionary
             foreach(var word in translator.Keys)
             {
                 Console.WriteLine(word);
-
             }
 
             Console.WriteLine("\nВведите слово значение которого вы хотите узнать:");
