@@ -43,11 +43,11 @@ namespace HMBraveNewWorld
 
                 MovePlayer(map, ref userPositionY, ref userPositionX);
 
-                ToCheckingPoints(map, ref userPositionY, ref userPositionX, ref sumHeart, ref isPlaing, symbolHeart);
+                InspectPoints(map, userPositionY, userPositionX, sumHeart, isPlaing, symbolHeart);
             }
         }
 
-        static void ToCheckingPoints(char[,] map, ref int userPositionY, ref int userPositionX, ref int sumHeart, ref bool isPlaing, char symbolHeart)
+        static void InspectPoints(char[,] map, int userPositionY, int userPositionX, int sumHeart, bool isPlaing, char symbolHeart)
         {
             char symbolEndGame = '_';
 
