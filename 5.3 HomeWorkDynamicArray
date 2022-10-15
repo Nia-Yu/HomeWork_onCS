@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+
+namespace HWDynamicArray
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> numbers = new List<int> ();
+            string userInput = "";
+            string commandSum = "sum";
+            string commandExit = "exit";
+
+            while (userInput != commandExit)
+            {
+                Console.WriteLine($"Введите число, {commandExit} или {commandSum}: ");
+                userInput = Console.ReadLine();
+
+                if (userInput != commandSum && userInput != commandExit)
+                {
+                    InsertNumber(numbers, userInput);
+                }
+                else if (userInput == commandSum)
+                {
+                    SummarizeArray(numbers);
+                }
+            }
+
+            Console.Clear();
+            Console.WriteLine("Конец программы!");
+        }
+
+        static void InsertNumber(List<int> numbers, string userInput)
+        {
+            int number;
+
+            number = Convert.ToInt32(userInput);
+            numbers.Add(number);
+        }
+
+        static void SummarizeArray(List<int> numbers)
+        {
+            int arraySum = 0;
+
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                arraySum += numbers[i];
+            }
+
+            Console.WriteLine($"Сумма массива: {arraySum} ");
+        }
+    }
+}
