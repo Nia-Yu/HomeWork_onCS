@@ -37,6 +37,10 @@ namespace HMPersonnelAccounting2
                     case CommandExit:
                         isWork = false;
                         break;
+
+                    default:
+                        Console.WriteLine("Такой команды нет.");
+                        break;
                 }
             }
         }
@@ -48,9 +52,15 @@ namespace HMPersonnelAccounting2
             Console.WriteLine("\nВведите должность: \n");
             string post = Console.ReadLine();
 
-            dossiers.Add(surname, post);
-
-            Console.WriteLine("\nДанные добавлены!\n");
+            if (dossiers.ContainsKey(surname))
+            {
+                Console.WriteLine($"\nДосье с такой фамилией существует!");
+            }
+            else
+            {
+                dossiers.Add(surname, post);
+                Console.WriteLine("\nДанные добавлены!\n");
+            }
         }
 
         static void DeleteDossier(Dictionary<string, string> dossiers)
