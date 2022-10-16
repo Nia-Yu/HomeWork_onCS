@@ -41,54 +41,85 @@ namespace HMBraveNewWorld
 
                 DrawPlayer(userPositionX, userPositionY);
 
-                MovePlayer(map, ref userPositionY, ref userPositionX);
+                ShiftMarker(map, ref userPositionY, ref userPositionX);
 
-                InspectPoints(map, userPositionY, userPositionX, sumHeart, isPlaing, symbolHeart);
+                char symbolEndGame = '_';
+
+                if (map[userPositionY, userPositionX] == symbolHeart)
+                {
+                    map[userPositionY, userPositionX] = ' ';
+
+                    sumHeart += 1;
+                }
+                else if (map[userPositionY, userPositionX] == symbolEndGame)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} {symbolHeart}");
+                    isPlaing = false;
+                }
             }
         }
 
-        static void InspectPoints(char[,] map, int userPositionY, int userPositionX, int sumHeart, bool isPlaing, char symbolHeart)
+        static void ShiftMarker(char[,] map, ref int positionX, ref int positionY)
         {
-            char symbolEndGame = '_';
+            ConsoleKeyInfo charKey = Console.ReadKey();
 
-            if (map[userPositionY, userPositionX] == symbolHeart)
+            switch (charKey.Key)
             {
-                map[userPositionY, userPositionX] = ' ';
+                case ConsoleKey.UpArrow:
+                    OffsetMarker(map, charKey, positionX - 1, positionY, ref positionX);
+                    break;
 
-                sumHeart += 1;
-            }
-            else if (map[userPositionY, userPositionX] == symbolEndGame)
-            {
-                Console.Clear();
-                Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} {symbolHeart}");
-                isPlaing = false;
+                case ConsoleKey.DownArrow:
+                    OffsetMarker(map, charKey, positionX + 1, positionY, ref positionX);
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    OffsetMarker(map, charKey, positionX, positionY - 1, ref positionY);
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    OffsetMarker(map, charKey, positionX, positionY + 1, ref positionY);
+                    break;
+
+                default:
+                    Console.CursorVisible = true;
+                    break;
             }
         }
 
-        static void MovePlayer(char[,] map, ref int userPositionY, ref int userPositionX)
+        static void OffsetMarker(char[,] map, ConsoleKeyInfo charKey, int positionX, int positionY, ref int positionShift)
+        {
+            bool isBarrier = false;
+
+            InspectBorder(map, positionX, positionY, ref isBarrier);
+            MovePlayer(charKey, ref positionShift, isBarrier);
+        }
+
+        static bool InspectBorder(char[,] map, int positionX, int positionY, ref bool isBarrier)
         {
             char symbolWall = '#';
-            ConsoleKeyInfo direction = Console.ReadKey();
-            ConsoleKey directionUp = ConsoleKey.UpArrow;
-            ConsoleKey directionDown = ConsoleKey.DownArrow;
-            ConsoleKey directionLeft = ConsoleKey.LeftArrow;
-            ConsoleKey directionRight = ConsoleKey.RightArrow;
 
-            if (direction.Key == directionUp && map[userPositionY - 1, userPositionX] != symbolWall)
+            if (map[positionX, positionY] == symbolWall)
             {
-                userPositionY--;
+                isBarrier = true;
             }
-            else if (direction.Key == directionDown && map[userPositionY + 1, userPositionX] != symbolWall)
+
+            return isBarrier;
+        }
+
+        static void MovePlayer(ConsoleKeyInfo charKey, ref int position, bool isBarrier)
+        {
+            if (isBarrier == false)
             {
-                userPositionY++;
-            }
-            else if (direction.Key == directionLeft && map[userPositionY, userPositionX - 1] != symbolWall)
-            {
-                userPositionX--;
-            }
-            else if (direction.Key == directionRight && map[userPositionY, userPositionX + 1] != symbolWall)
-            {
-                userPositionX++;
+                if (charKey.Key == ConsoleKey.DownArrow || charKey.Key == ConsoleKey.RightArrow)
+                {
+                    position++;
+                }
+                else if (charKey.Key == ConsoleKey.UpArrow || charKey.Key == ConsoleKey.LeftArrow)
+                {
+                    position--;
+                }
             }
         }
 
