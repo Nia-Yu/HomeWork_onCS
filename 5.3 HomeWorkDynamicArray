@@ -7,23 +7,30 @@ namespace HWDynamicArray
     {
         static void Main(string[] args)
         {
-            List<int> numbers = new List<int> ();
+            List<int> numbers = new List<int>();
             string userInput = "";
-            string commandSum = "sum";
-            string commandExit = "exit";
+            const string commandSum = "sum";
+            const string commandExit = "exit";
+            bool isWork = true;
 
-            while (userInput != commandExit)
+            while (isWork)
             {
                 Console.WriteLine($"Введите число, {commandExit} или {commandSum}: ");
                 userInput = Console.ReadLine();
 
-                if (userInput != commandSum && userInput != commandExit)
+                switch (userInput)
                 {
-                    InsertNumber(numbers, userInput);
-                }
-                else if (userInput == commandSum)
-                {
-                    SummarizeArray(numbers);
+                    case commandSum:
+                        ShowSum(numbers);
+                        break;
+
+                    case commandExit:
+                        isWork = false;
+                        break;
+
+                    default:
+                        AddNumber(numbers, userInput);
+                        break;
                 }
             }
 
@@ -31,15 +38,21 @@ namespace HWDynamicArray
             Console.WriteLine("Конец программы!");
         }
 
-        static void InsertNumber(List<int> numbers, string userInput)
+        static void AddNumber(List<int> numbers, string userInput)
         {
-            int number;
+            bool isNumber = int.TryParse(userInput, out int number);
 
-            number = Convert.ToInt32(userInput);
-            numbers.Add(number);
+            if (isNumber == true)
+            {
+                numbers.Add(number);
+            }
+            else
+            {
+                Console.WriteLine("\nНекорректный ввод\n");
+            }
         }
 
-        static void SummarizeArray(List<int> numbers)
+        static void ShowSum(List<int> numbers)
         {
             int arraySum = 0;
 
