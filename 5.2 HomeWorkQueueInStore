@@ -13,10 +13,11 @@ namespace HMQueueInStore
             int sumInBoxOffice = 0;
             int sumReceipt;
 
-            FillUpQueue(receipts); 
+            FillUpQueue(receipts);
 
-            for (int i = receipts.Count; i != 0; i--)
+            while(receipts.Count != 0)
             {
+                Console.WriteLine("Очередь в магазине:");
                 sumReceipt = MakeReceipt(receipts);
                 sumInBoxOffice += sumReceipt;
                 Console.WriteLine($"Сумма в кассе: {sumInBoxOffice}");
@@ -33,8 +34,6 @@ namespace HMQueueInStore
             Random random = new Random();
             int minMeaningRamdom = 1;
             int maxMeaningRamdom = 200;
-
-            Console.WriteLine("Очередь в магазине:");
 
             for (int i = 0; i < peopleInLine; i++)
             {
