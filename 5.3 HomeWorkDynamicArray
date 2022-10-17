@@ -7,24 +7,24 @@ namespace HWDynamicArray
     {
         static void Main(string[] args)
         {
+            const string CommandSum = "sum";
+            const string CommandExit = "exit";
             List<int> numbers = new List<int>();
             string userInput = "";
-            const string commandSum = "sum";
-            const string commandExit = "exit";
             bool isWork = true;
 
             while (isWork)
             {
-                Console.WriteLine($"Введите число, {commandExit} или {commandSum}: ");
+                Console.WriteLine($"Введите число, {CommandExit} или {CommandSum}: ");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
-                    case commandSum:
+                    case CommandSum:
                         ShowSum(numbers);
                         break;
 
-                    case commandExit:
+                    case CommandExit:
                         isWork = false;
                         break;
 
