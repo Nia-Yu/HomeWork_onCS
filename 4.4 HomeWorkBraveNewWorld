@@ -62,28 +62,24 @@ namespace HMBraveNewWorld
 
         static void ShiftMarker(char[,] map, ref int positionX, ref int positionY)
         {
-            string directionUp = "Up";
-            string directionDown = "Down";
-            string directionLeft = "Left";
-            string directionRight = "Right";
             ConsoleKeyInfo charKey = Console.ReadKey();
 
             switch (charKey.Key)
             {
                 case ConsoleKey.UpArrow:
-                    OffsetMarker(map, charKey, positionX - 1, positionY, ref positionX, directionUp);
+                    OffsetMarker(map, charKey, positionX - 1, positionY, ref positionX);
                     break;
 
                 case ConsoleKey.DownArrow:
-                    OffsetMarker(map, charKey, positionX + 1, positionY, ref positionX, directionDown);
+                    OffsetMarker(map, charKey, positionX + 1, positionY, ref positionX);
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    OffsetMarker(map, charKey, positionX, positionY - 1, ref positionY, directionLeft);
+                    OffsetMarker(map, charKey, positionX, positionY - 1, ref positionY);
                     break;
 
                 case ConsoleKey.RightArrow:
-                    OffsetMarker(map, charKey, positionX, positionY + 1, ref positionY, directionRight);
+                    OffsetMarker(map, charKey, positionX, positionY + 1, ref positionY);
                     break;
 
                 default:
@@ -92,12 +88,12 @@ namespace HMBraveNewWorld
             }
         }
 
-        static void OffsetMarker(char[,] map, ConsoleKeyInfo charKey, int positionX, int positionY, ref int positionShift, string direction)
+        static void OffsetMarker(char[,] map, ConsoleKeyInfo charKey, int positionX, int positionY, ref int positionShift)
         {
             bool isBarrier = false;
 
             InspectBorder(map, positionX, positionY, ref isBarrier);
-            MovePlayer(charKey, ref positionShift, isBarrier, direction);
+            MovePlayer(charKey, ref positionShift, isBarrier);
         }
 
         static void InspectBorder(char[,] map, int positionX, int positionY, ref bool isBarrier)
@@ -110,15 +106,20 @@ namespace HMBraveNewWorld
             }
         }
 
-        static void MovePlayer(ConsoleKeyInfo charKey, ref int position, bool isBarrier, string direction)
+        static void MovePlayer(ConsoleKeyInfo charKey, ref int position, bool isBarrier)
         {
+            ConsoleKey directionUp = ConsoleKey.UpArrow;
+            ConsoleKey directionDown = ConsoleKey.DownArrow;
+            ConsoleKey directionLeft = ConsoleKey.LeftArrow;
+            ConsoleKey directionRight = ConsoleKey.RightArrow;
+
             if (isBarrier == false)
             {
-                if (direction == "Down" || direction == "Right")
+                if (charKey.Key == directionDown || charKey.Key == directionRight)
                 {
                     position++;
                 }
-                else if (direction == "Up" || direction == "Left")
+                else if (charKey.Key == directionUp || charKey.Key == directionLeft)
                 {
                     position--;
                 }
