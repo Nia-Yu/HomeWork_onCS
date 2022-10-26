@@ -67,25 +67,27 @@ namespace HMBraveNewWorld
             switch (charKey.Key)
             {
                 case ConsoleKey.UpArrow:
-                    OffsetMarker(map, charKey, positionX - 1, positionY, ref positionX);
+                    positionX -= 1;
                     break;
 
                 case ConsoleKey.DownArrow:
-                    OffsetMarker(map, charKey, positionX + 1, positionY, ref positionX);
+                    positionX += 1;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    OffsetMarker(map, charKey, positionX, positionY - 1, ref positionY);
+                    positionY -= 1;
                     break;
 
                 case ConsoleKey.RightArrow:
-                    OffsetMarker(map, charKey, positionX, positionY + 1, ref positionY);
+                    positionY += 1;
                     break;
 
                 default:
                     Console.CursorVisible = true;
                     break;
             }
+
+            OffsetMarker(map, charKey, positionX, positionY, ref positionX);
         }
 
         static void OffsetMarker(char[,] map, ConsoleKeyInfo charKey, int positionX, int positionY, ref int positionShift)
