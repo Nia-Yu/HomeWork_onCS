@@ -1,0 +1,261 @@
+using System;
+using System.Collections.Generic;
+
+namespace HWPlayersDatabase
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ShowMenu();
+
+        }
+        static void ShowMenu()
+        {
+            Database database = new Database();
+            bool isWork = true;
+
+            while (isWork)
+            {
+                const string CommandAdd = "1";
+                const string CommandBun = "2";
+                const string CommandUnBun = "3";
+                const string CommandDelete = "4";
+                const string CommandOutput = "5";
+                const string CommandExit = "0";
+
+
+                Console.WriteLine($"Выберите действие:" +
+                    $"\n{CommandAdd}. Добавить игрока " +
+                    $"\n{CommandBun}. Забанить игрока " +
+                    $"\n{CommandUnBun}. Разбанить игрока " +
+                    $"\n{CommandDelete}. Удалить игрока " +
+                    $"\n{CommandOutput}. Вывести всю нформацию об игроках " +
+                    $"\n{CommandExit}. Выход\n");
+                string userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case CommandAdd:
+                        database.AddPlayer();
+                        break;
+
+                    case CommandBun:
+                        database.BanPlayer();
+                        break;
+
+                    case CommandUnBun:
+                        database.UnBanPlayer();
+                        break;
+
+                    case CommandDelete:
+                        database.DeletePlayer();
+                        break;
+
+                    case CommandOutput:
+                        database.ShowInfoBase();
+                        break;
+
+                    case CommandExit:
+                        isWork = false;
+                        break;
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Такой команды нет.");
+                        break;
+                }
+            }
+        }
+    }
+
+    class Database
+    {
+        private List<Player> _players = new List<Player>();
+        public int PlayerNumber { get; private set; }
+
+        public Database()
+        {
+            PlayerNumber = 0;
+        }
+
+        public void AddPlayer()
+        {
+            Console.Clear();
+            Console.WriteLine("Введите имя:");
+            string name = Console.ReadLine();
+            Console.WriteLine("Введите уровень: ");
+            int level = ReadIntNumber();
+
+            Player player = new Player(PlayerNumber, name, level);
+            _players.Add(player);
+            PlayerNumber++;
+            Console.Clear();
+        }
+
+        public void BanPlayer()
+        {
+            Console.Clear();
+            if (IsBaseEmpty())
+            {
+                Console.WriteLine("Введите номер игрока которого хотите забанить: ");
+
+                Player player = TryGetPlayer();
+
+                player.Ban();
+            }
+        }
+
+        public void UnBanPlayer()
+        {
+            Console.Clear();
+            if (IsBaseEmpty())
+            {
+                Console.WriteLine("Введите номер игрока которого хотите разбанить: ");
+
+                Player player = TryGetPlayer();
+
+                player.UnBan();
+            }
+        }
+
+        public void DeletePlayer()
+        {
+            Console.Clear();
+            if (_players.Count != 0)
+            {
+                Console.WriteLine("Введите номер игрока которого хотите удалить: ");
+
+                Player player = TryGetPlayer();
+
+                _players.Remove(player);
+                Console.Write("Игрок удален!");
+            }
+            else
+            {
+                Console.WriteLine("База пуста.");
+                Console.ReadKey();
+            }
+        }
+
+        public void ShowInfoBase()
+        {
+            Console.Clear();
+            if (IsBaseEmpty())
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    _players[i].ShowInfo();
+                }
+            }
+        }
+
+        private bool IsBaseEmpty()
+        {
+            bool isCheck = true;
+
+            if (_players.Count == 0)
+            {
+                Console.WriteLine("База пуста.");
+                isCheck = false;
+            }
+            return isCheck;
+        }
+
+        private int ReadIntNumber()
+        {
+            string userInput = Console.ReadLine();
+            int numberInput = 0;
+
+            while ((int.TryParse(userInput, out numberInput) == false))
+            {
+                Console.WriteLine("Ошибка ввода! Проверьте введенные данные");
+
+                userInput = Console.ReadLine();
+            }
+
+            return numberInput;
+        }
+
+        private Player TryGetPlayer()
+        {
+            bool isCheck = true;
+            Player playerFound = null;
+
+            while (isCheck)
+            {
+                int numberId = ReadIntNumber();
+
+                foreach (var player in _players)
+                {
+                    if (player.PlayerNumber == numberId)
+                    {
+                        playerFound = player;
+                        isCheck = false;
+                    }
+                }
+
+                if (playerFound == null)
+                {
+                    Console.WriteLine("Ошибка! Игрок не найден, введите номер игрока из списка: ");
+                }
+            }
+            return playerFound;
+        }
+
+        class Player
+        {
+            private string _name;
+            private int _level;
+            private bool _isBanned;
+
+            public int PlayerNumber { get; private set; }
+
+            public Player(int number, string name, int level, bool _isBanned = false)
+            {
+                PlayerNumber = number;
+                _name = name;
+                _level = level;
+            }
+
+            public void Ban()
+            {
+                if (_isBanned == true)
+                {
+                    Console.WriteLine("Действие не успешно. Игрок уже был забанен.");
+                }
+                else
+                {
+                    _isBanned = true;
+                    ShowInfo();
+                }
+            }
+
+            public void UnBan()
+            {
+                if (_isBanned == false)
+                {
+                    Console.WriteLine("Действие не успешно. Игрок уже был разбанен.");
+                }
+                else
+                {
+                    _isBanned = false;
+                    ShowInfo();
+                }
+            }
+
+            public void ShowInfo()
+            {
+                Console.WriteLine($"Уникальный номер - {PlayerNumber}\nНикнейм - {_name}\nУровень - {_level}");
+                if (_isBanned == true)
+                {
+                    Console.WriteLine("Игрок забанен: да\n");
+                }
+                else if (_isBanned == false)
+                {
+                    Console.WriteLine("Игрок забанен: нет\n");
+                }
+            }
+        }
+    }
+}
