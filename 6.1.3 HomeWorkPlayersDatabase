@@ -7,19 +7,32 @@ namespace HWPlayersDatabase
     {
         static void Main(string[] args)
         {
-            ShowMenu();
+            Database database = new Database();
+
+            database.ShowMenu();
 
         }
-        static void ShowMenu()
+    }
+
+    class Database
+    {
+        private List<Player> _players = new List<Player>();
+        private int _lastID;
+
+        public Database()
         {
-            Database database = new Database();
+            _lastID = 0;
+        }
+
+        public void ShowMenu()
+        {
             bool isWork = true;
 
             while (isWork)
             {
                 const string CommandAdd = "1";
-                const string CommandBun = "2";
-                const string CommandUnBun = "3";
+                const string CommandBan = "2";
+                const string CommandUnban = "3";
                 const string CommandDelete = "4";
                 const string CommandOutput = "5";
                 const string CommandExit = "0";
@@ -27,8 +40,8 @@ namespace HWPlayersDatabase
 
                 Console.WriteLine($"Выберите действие:" +
                     $"\n{CommandAdd}. Добавить игрока " +
-                    $"\n{CommandBun}. Забанить игрока " +
-                    $"\n{CommandUnBun}. Разбанить игрока " +
+                    $"\n{CommandBan}. Забанить игрока " +
+                    $"\n{CommandUnban}. Разбанить игрока " +
                     $"\n{CommandDelete}. Удалить игрока " +
                     $"\n{CommandOutput}. Вывести всю нформацию об игроках " +
                     $"\n{CommandExit}. Выход\n");
@@ -37,23 +50,23 @@ namespace HWPlayersDatabase
                 switch (userInput)
                 {
                     case CommandAdd:
-                        database.AddPlayer();
+                        AddPlayer();
                         break;
 
-                    case CommandBun:
-                        database.BanPlayer();
+                    case CommandBan:
+                        BanPlayer();
                         break;
 
-                    case CommandUnBun:
-                        database.UnBanPlayer();
+                    case CommandUnban:
+                        UnbanPlayer();
                         break;
 
                     case CommandDelete:
-                        database.DeletePlayer();
+                        DeletePlayer();
                         break;
 
                     case CommandOutput:
-                        database.ShowInfoBase();
+                        ShowInfoPlayers();
                         break;
 
                     case CommandExit:
@@ -67,17 +80,6 @@ namespace HWPlayersDatabase
                 }
             }
         }
-    }
-
-    class Database
-    {
-        private List<Player> _players = new List<Player>();
-        public int PlayerNumber { get; private set; }
-
-        public Database()
-        {
-            PlayerNumber = 0;
-        }
 
         public void AddPlayer()
         {
@@ -87,61 +89,63 @@ namespace HWPlayersDatabase
             Console.WriteLine("Введите уровень: ");
             int level = ReadIntNumber();
 
-            Player player = new Player(PlayerNumber, name, level);
+            Player player = new Player(_lastID, name, level);
             _players.Add(player);
-            PlayerNumber++;
+            _lastID++;
             Console.Clear();
         }
 
         public void BanPlayer()
         {
             Console.Clear();
-            if (IsBaseEmpty())
+
+            if (CheckBaseLength())
             {
                 Console.WriteLine("Введите номер игрока которого хотите забанить: ");
 
-                Player player = TryGetPlayer();
-
-                player.Ban();
+                if (TryGetPlayer(out Player player) == false)
+                {
+                    player.Ban();
+                }                
             }
         }
 
-        public void UnBanPlayer()
+        public void UnbanPlayer()
         {
             Console.Clear();
-            if (IsBaseEmpty())
+
+            if (CheckBaseLength())
             {
                 Console.WriteLine("Введите номер игрока которого хотите разбанить: ");
 
-                Player player = TryGetPlayer();
-
-                player.UnBan();
+                if (TryGetPlayer(out Player player) == false)
+                {
+                    player.Unban();
+                }
             }
         }
 
         public void DeletePlayer()
         {
             Console.Clear();
-            if (_players.Count != 0)
+
+            if (CheckBaseLength())
             {
                 Console.WriteLine("Введите номер игрока которого хотите удалить: ");
 
-                Player player = TryGetPlayer();
-
-                _players.Remove(player);
-                Console.Write("Игрок удален!");
-            }
-            else
-            {
-                Console.WriteLine("База пуста.");
-                Console.ReadKey();
+                if (TryGetPlayer(out Player player) == false)
+                {
+                    _players.Remove(player);
+                    Console.Write("Игрок удален!");
+                }
             }
         }
 
-        public void ShowInfoBase()
+        public void ShowInfoPlayers()
         {
             Console.Clear();
-            if (IsBaseEmpty())
+
+            if (CheckBaseLength())
             {
                 for (int i = 0; i < _players.Count; i++)
                 {
@@ -150,7 +154,7 @@ namespace HWPlayersDatabase
             }
         }
 
-        private bool IsBaseEmpty()
+        private bool CheckBaseLength()
         {
             bool isCheck = true;
 
@@ -159,6 +163,7 @@ namespace HWPlayersDatabase
                 Console.WriteLine("База пуста.");
                 isCheck = false;
             }
+
             return isCheck;
         }
 
@@ -177,10 +182,10 @@ namespace HWPlayersDatabase
             return numberInput;
         }
 
-        private Player TryGetPlayer()
+        private bool TryGetPlayer(out Player playerFound)
         {
             bool isCheck = true;
-            Player playerFound = null;
+            playerFound = null;
 
             while (isCheck)
             {
@@ -200,7 +205,8 @@ namespace HWPlayersDatabase
                     Console.WriteLine("Ошибка! Игрок не найден, введите номер игрока из списка: ");
                 }
             }
-            return playerFound;
+
+            return isCheck;
         }
 
         class Player
@@ -231,7 +237,7 @@ namespace HWPlayersDatabase
                 }
             }
 
-            public void UnBan()
+            public void Unban()
             {
                 if (_isBanned == false)
                 {
@@ -247,6 +253,7 @@ namespace HWPlayersDatabase
             public void ShowInfo()
             {
                 Console.WriteLine($"Уникальный номер - {PlayerNumber}\nНикнейм - {_name}\nУровень - {_level}");
+
                 if (_isBanned == true)
                 {
                     Console.WriteLine("Игрок забанен: да\n");
