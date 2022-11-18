@@ -193,7 +193,7 @@ namespace HWPlayersDatabase
 
                 foreach (var player in _players)
                 {
-                    if (player.PlayerNumber == numberId)
+                    if (player.IdNumber == numberId)
                     {
                         playerFound = player;
                         isCheck = false;
@@ -215,11 +215,11 @@ namespace HWPlayersDatabase
             private int _level;
             private bool _isBanned;
 
-            public int PlayerNumber { get; private set; }
+            public int IdNumber { get; private set; }
 
             public Player(int number, string name, int level, bool _isBanned = false)
             {
-                PlayerNumber = number;
+                IdNumber = number;
                 _name = name;
                 _level = level;
             }
@@ -252,7 +252,7 @@ namespace HWPlayersDatabase
 
             public void ShowInfo()
             {
-                Console.WriteLine($"Уникальный номер - {PlayerNumber}\nНикнейм - {_name}\nУровень - {_level}");
+                Console.WriteLine($"Уникальный номер - {IdNumber}\nНикнейм - {_name}\nУровень - {_level}");
 
                 if (_isBanned == true)
                 {
