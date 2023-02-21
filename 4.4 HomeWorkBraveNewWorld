@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 
 namespace HMBraveNewWorld
 {
@@ -28,20 +29,23 @@ namespace HMBraveNewWorld
                 {'#','♥',' ',' ',' ','#','#',' ','#',' ','♥','#',' ',' ','#' },
                 {'#','#','#','#','#','#','#','#','#','#','#','#','#','_','#' },
             };
-
-            Console.SetCursorPosition(0, 15);
-            Console.WriteLine($"Пройди лабиринт! Собери как можно больше {symbolHeart}");
-            Console.SetCursorPosition(0, 0);
             int userPositionX = 1;
             int userPositionY = 0;
 
             while (isPlaing)
             {
+                Console.Clear();
+                Console.SetCursorPosition(0, 15);
+                Console.WriteLine($"Пройди лабиринт! Собери как можно больше {symbolHeart}");
+                Console.SetCursorPosition(0, 0);
+                
                 DrawMap(map);
 
                 DrawPlayer(userPositionX, userPositionY);
 
-                ShiftMarker(map, ref userPositionY, ref userPositionX);
+                ConsoleKeyInfo pressedKey = Console.ReadKey();
+
+                MovePlayer(pressedKey, map, ref userPositionY, ref userPositionX, ref sumHeart, symbolHeart);
 
                 char symbolEndGame = '_';
 
@@ -60,26 +64,41 @@ namespace HMBraveNewWorld
             }
         }
 
-        static void ShiftMarker(char[,] map, ref int positionX, ref int positionY)
+        static void MovePlayer(ConsoleKeyInfo pressedKey, char[,] map, ref int positionX, ref int positionY, ref int sumHeart, char symbolHeart)
         {
-            ConsoleKeyInfo charKey = Console.ReadKey();
+            int[] direction = GetDirection(pressedKey);
 
-            switch (charKey.Key)
+            int nextUserPositionX = positionX + direction[0];
+            int nextUserPositionY = positionY + direction[1];
+            char nextSymbol = map[nextUserPositionX, nextUserPositionY];
+
+            if (nextSymbol != '#')
+            {
+                positionX = nextUserPositionX;
+                positionY = nextUserPositionY;
+            }
+        }
+
+        static int[] GetDirection(ConsoleKeyInfo pressedKey) 
+        {
+            int[] direction = { 0, 0 };
+
+            switch (pressedKey.Key)
             {
                 case ConsoleKey.UpArrow:
-                    positionX -= 1;
+                    direction[0] = -1;
                     break;
 
                 case ConsoleKey.DownArrow:
-                    positionX += 1;
+                    direction[0] = 1;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    positionY -= 1;
+                    direction[1] = -1;
                     break;
 
                 case ConsoleKey.RightArrow:
-                    positionY += 1;
+                    direction[1] = 1;
                     break;
 
                 default:
@@ -87,51 +106,11 @@ namespace HMBraveNewWorld
                     break;
             }
 
-            OffsetMarker(map, charKey, positionX, positionY, ref positionX);
-        }
-
-        static void OffsetMarker(char[,] map, ConsoleKeyInfo charKey, int positionX, int positionY, ref int positionShift)
-        {
-            bool isBarrier = false;
-
-            InspectBorder(map, positionX, positionY, ref isBarrier);
-            MovePlayer(charKey, ref positionShift, isBarrier);
-        }
-
-        static void InspectBorder(char[,] map, int positionX, int positionY, ref bool isBarrier)
-        {
-            char symbolWall = '#';
-
-            if (map[positionX, positionY] == symbolWall)
-            {
-                isBarrier = true;
-            }
-        }
-
-        static void MovePlayer(ConsoleKeyInfo charKey, ref int position, bool isBarrier)
-        {
-            ConsoleKey directionUp = ConsoleKey.UpArrow;
-            ConsoleKey directionDown = ConsoleKey.DownArrow;
-            ConsoleKey directionLeft = ConsoleKey.LeftArrow;
-            ConsoleKey directionRight = ConsoleKey.RightArrow;
-
-            if (isBarrier == false)
-            {
-                if (charKey.Key == directionDown || charKey.Key == directionRight)
-                {
-                    position++;
-                }
-                else if (charKey.Key == directionUp || charKey.Key == directionLeft)
-                {
-                    position--;
-                }
-            }
+            return direction;
         }
 
         static void DrawMap(char[,] map)
         {
-            Console.SetCursorPosition(0, 0);
-
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 for (int j = 0; j < map.GetLength(1); j++)
