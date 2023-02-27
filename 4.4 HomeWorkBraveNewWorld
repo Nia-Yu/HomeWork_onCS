@@ -11,7 +11,7 @@ namespace HMBraveNewWorld
             Console.CursorVisible = false;
 
             int sumHeart = 0;
-            bool isPlaing = true;
+            bool isPlaying = true;
             char symbolHeart = '♥';
             char[,] map =
              {
@@ -32,20 +32,23 @@ namespace HMBraveNewWorld
             int userPositionX = 1;
             int userPositionY = 0;
 
-            while (isPlaing)
+            DrawMap(map);
+
+            while (isPlaying)
             {
-                Console.Clear();
+                //Console.Clear();
                 Console.SetCursorPosition(0, 15);
                 Console.WriteLine($"Пройди лабиринт! Собери как можно больше {symbolHeart}");
                 Console.SetCursorPosition(0, 0);
-                
-                DrawMap(map);
 
                 DrawPlayer(userPositionX, userPositionY);
 
                 ConsoleKeyInfo pressedKey = Console.ReadKey();
 
-                MovePlayer(pressedKey, map, ref userPositionY, ref userPositionX, ref sumHeart, symbolHeart);
+                Console.SetCursorPosition(userPositionX, userPositionY);
+                Console.Write(' ');
+
+                MovePlayer(pressedKey, ref map, ref userPositionY, ref userPositionX, ref sumHeart, symbolHeart);
 
                 char symbolEndGame = '_';
 
@@ -59,12 +62,12 @@ namespace HMBraveNewWorld
                 {
                     Console.Clear();
                     Console.WriteLine($"Лабирин пройден!!! Собрано {sumHeart} {symbolHeart}");
-                    isPlaing = false;
+                    isPlaying = false;
                 }
             }
         }
 
-        static void MovePlayer(ConsoleKeyInfo pressedKey, char[,] map, ref int positionX, ref int positionY, ref int sumHeart, char symbolHeart)
+        static void MovePlayer(ConsoleKeyInfo pressedKey, ref char[,] map, ref int positionX, ref int positionY, ref int sumHeart, char symbolHeart)
         {
             int[] direction = GetDirection(pressedKey);
 
@@ -79,25 +82,29 @@ namespace HMBraveNewWorld
             }
         }
 
-        static int[] GetDirection(ConsoleKeyInfo pressedKey) 
+        static int[] GetDirection(ConsoleKeyInfo pressedKey)
         {
             int[] direction = { 0, 0 };
+            const ConsoleKey UpDirection = ConsoleKey.UpArrow;
+            const ConsoleKey DownDirection = ConsoleKey.DownArrow;
+            const ConsoleKey LeftDirection = ConsoleKey.LeftArrow;
+            const ConsoleKey RightDirection = ConsoleKey.RightArrow;
 
             switch (pressedKey.Key)
             {
-                case ConsoleKey.UpArrow:
+                case UpDirection:
                     direction[0] = -1;
                     break;
 
-                case ConsoleKey.DownArrow:
+                case DownDirection:
                     direction[0] = 1;
                     break;
 
-                case ConsoleKey.LeftArrow:
+                case LeftDirection:
                     direction[1] = -1;
                     break;
 
-                case ConsoleKey.RightArrow:
+                case RightDirection:
                     direction[1] = 1;
                     break;
 
