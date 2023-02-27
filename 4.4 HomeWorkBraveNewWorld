@@ -36,7 +36,6 @@ namespace HMBraveNewWorld
 
             while (isPlaying)
             {
-                //Console.Clear();
                 Console.SetCursorPosition(0, 15);
                 Console.WriteLine($"Пройди лабиринт! Собери как можно больше {symbolHeart}");
                 Console.SetCursorPosition(0, 0);
