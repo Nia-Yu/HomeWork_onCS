@@ -47,7 +47,7 @@ namespace HMBraveNewWorld
                 Console.SetCursorPosition(userPositionX, userPositionY);
                 Console.Write(' ');
 
-                MovePlayer(pressedKey, ref map, ref userPositionY, ref userPositionX, ref sumHeart, symbolHeart);
+                MovePlayer(pressedKey, map, ref userPositionY, ref userPositionX);
 
                 char symbolEndGame = '_';
 
@@ -66,7 +66,7 @@ namespace HMBraveNewWorld
             }
         }
 
-        static void MovePlayer(ConsoleKeyInfo pressedKey, ref char[,] map, ref int positionX, ref int positionY, ref int sumHeart, char symbolHeart)
+        static void MovePlayer(ConsoleKeyInfo pressedKey, char[,] map, ref int positionX, ref int positionY)
         {
             int[] direction = GetDirection(pressedKey);
 
