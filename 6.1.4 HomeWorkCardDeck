@@ -1,0 +1,400 @@
+using System;
+using System.Collections.Generic;
+
+namespace HWCardDeck
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.CursorVisible = false;
+
+            bool gameWorks = true;
+            string userInput;
+
+            const string AnswerYes = "y";
+            const string AnswerNo = "n";
+
+            Console.WriteLine("Игра 21 очко.\n");
+            Console.ReadKey();
+            ShowRules();
+
+            while (gameWorks)
+            {
+                Console.WriteLine($"Начать игру?" +
+                $"\n{AnswerYes}" +
+                $"\n{AnswerNo}\n");
+                userInput = Console.ReadLine();
+
+                if (userInput == AnswerYes)
+                {
+                    gameWorks = true;
+                    Console.Clear();
+                    StartGame();
+                }
+                else if (userInput == AnswerNo)
+                {
+                    Console.Clear();
+                    gameWorks = false;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Не корректный ввод.\n");
+                }
+            }
+        }
+
+        static void StartGame()
+        {
+            Deck deck = new Deck();
+            Player player = new Player();
+            Card topCard = null;
+
+            int startingCardsQuantity = 2;
+
+            deck.ShuffleArray();
+            DealCards(startingCardsQuantity, ref topCard, deck, player);
+            Game(ref topCard, deck, player);
+        }
+
+        static void Game(ref Card topCard, Deck deck, Player player)
+        {
+            bool isWork = true;
+            int dealCardsQuantity = 1;
+            string userInput;
+
+            while (isWork)
+            {
+                const string CommandShowCardsInHand = "1";
+                const string CommandTakingCard = "2";
+                const string CommandGameOver = "3";
+                const string CommandShowRules = "0";
+
+                Console.WriteLine("Выбирите действие:");
+                ShowMenu(CommandShowCardsInHand, CommandTakingCard, CommandGameOver, CommandShowRules);
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case CommandShowCardsInHand:
+                        player.ShowInfoHand();
+                        break;
+
+                    case CommandTakingCard:
+                        DealCards(dealCardsQuantity, ref topCard, deck, player);
+                        break;
+
+                    case CommandShowRules:
+                        ShowRules();
+                        break;
+
+                    case CommandGameOver:
+                        isWork = EndGame(player);
+                        break;
+
+                    default:
+                        Console.WriteLine("Не корректный воод. \nНажмите клавишу, чтобы повторить...");
+                        Console.ReadKey();
+                        break;
+                }
+
+                Console.Clear();
+            }
+        }
+
+        static bool EndGame(Player player)
+        {
+            bool isWork = false;
+            int maxPoints = 21;
+            int playerPoints = player.DeckSum();
+
+            if (playerPoints > maxPoints)
+            {
+                Console.WriteLine($"Вы набрали {playerPoints}. Это больше чем {maxPoints} очко." +
+                    $"\nВы проиграли!");
+            }
+            else if (playerPoints == maxPoints)
+            {
+                Console.WriteLine($"Вы набрали {playerPoints} очко." +
+                    $"\nВы выиграли!");
+            }
+            else
+            {
+                Console.WriteLine($"Вы набрали {playerPoints}. Это меньше чем {maxPoints} очко." +
+                    $"\nПопробуйте снова!");
+            }
+
+            Console.ReadKey();
+
+            return isWork;
+        }
+
+        static void DealCards(int numberOfCards, ref Card topCard, Deck deck, Player player)
+        {
+            for (int i = 0; i < numberOfCards; i++)
+            {
+                topCard = deck.TakeCard();
+                player.DialCards(topCard);
+                deck.ShuffleArray();
+            }
+
+            if (numberOfCards == 1)
+            {
+                Console.Clear();
+                Console.WriteLine("Вытянутая карта:\n");
+                topCard.ShowInfo();
+                Console.ReadKey();
+            }
+        }
+
+        static void ShowRules()
+        {
+            Console.Clear();
+            Console.WriteLine("Правила\n\n" + new string('-', 50));
+            Console.WriteLine($"Есть колода карт." +
+                $"\nВам выдано 2 карты в руку." +
+                $"\nДалее Вы можете: " +
+                $"\nПосмотреть карты в руке, вытянуть еще карту, " +
+                $"\nили закончить игру." +
+                $"\nКолода после каждой вытянутой карты перетасовывается." +
+                $"\nЕсли вы вытяните в общей сумме больше чем 21 очко, вы проиграете!");
+            Console.WriteLine(new string('-', 50) + "\n");
+            Console.ReadKey();
+        }
+
+        static void ShowMenu(string CommandShowInfo, string CommandTakingCard, string CommandGameOver, string CommandShowRules)
+        {
+            Console.WriteLine($"{CommandShowInfo} - Посмотреть карты в руке" +
+                $"\n{CommandTakingCard} - Вытянуть еще карту из колоды" +
+                $"\n{CommandGameOver} - Закончить игру" +
+                $"\n{CommandShowRules} - Показать правила\n");
+        }
+    }
+
+    enum Rank
+    {
+        Two = 2,
+        Three = 3,
+        Four = 4,
+        Five = 5,
+        Six = 6,
+        Seven = 7,
+        Eight = 8,
+        Nine = 9,
+        Ten = 10,
+        J,
+        Q,
+        K,
+        A
+    }
+
+    enum Suits
+    {
+        Hearts = '♥',
+        Diamonds = '♦',
+        Clubs = '♣',
+        Spades = '♠'
+    }
+
+    class Deck
+    {
+        private List<Card> _cards;
+
+        public Deck()
+        {
+            _cards = new List<Card>();
+            СreatingDeck();
+        }
+
+        private void СreatingDeck()
+        {
+            
+            //char[] suits = { '♥', '♦', '♠', '♣' };
+            //string[] values = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "V", "Q", "K", "A" };
+
+            foreach (Suits suit in (Suits[])Enum.GetValues(typeof(Suits)))
+            {
+                foreach (Rank rank in (Suits[])Enum.GetValues(typeof(Rank)))
+                {
+                    Card card = new Card(suit, rank);
+                    _cards.Add(card);
+                }
+            }
+
+            //foreach (var suit in suits)
+            //{
+            //    foreach (var value in values)
+            //    {
+            //        Card card = new Card(suit, value);
+            //        _cards.Add(card);
+            //    }
+            //}
+        }
+
+        public void ShuffleArray()
+        {
+            Random random = new Random();
+
+            for (int i = _cards.Count - 1; i >= 0; i--)
+            {
+                int randomElement = random.Next(i);
+                Card shuffledElement = _cards[randomElement];
+                _cards[randomElement] = _cards[i];
+                _cards[i] = shuffledElement;
+            }
+        }
+
+        public Card TakeCard()
+        {
+            Card topCard = _cards[_cards.Count - 1];
+            _cards.RemoveAt(_cards.Count - 1);
+
+            return topCard;
+        }
+
+        public void ShowInfoDesk()
+        {
+            for (int i = 0; i < _cards.Count; i++)
+            {
+                _cards[i].ShowInfo();
+            }
+        }
+    }
+
+    class Card
+    {
+        private Suits _suit;
+        private Rank _relevance;
+        private int _value;
+
+        public Card(Suits suit, Rank relevance)
+        {
+            _suit = suit;
+            _relevance = relevance;
+        }
+
+        public void ShowInfo()
+        {
+            Rank maxNumber = Rank.Ten;
+
+            if (_suit == Suits.Spades || _suit == Suits.Clubs)
+            {
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Black;
+
+                if (_relevance <= maxNumber)
+                {
+                    if (_relevance == maxNumber)
+                    {
+                        Console.WriteLine($"{((char)_suit)}{((int)_relevance)}");
+                    }
+                    else
+                        Console.WriteLine($"{((char)_suit)} {((int)_relevance)}");
+                }
+                else
+                {
+                    if (_relevance == maxNumber)
+                        Console.WriteLine($"{((char)_suit)}{_relevance}");
+                    else
+                        Console.WriteLine($"{((char)_suit)} {_relevance}");
+                }
+                    
+            }
+            else if (_suit == Suits.Hearts || _suit == Suits.Diamonds)
+            {
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                if (_relevance <= maxNumber)
+                {
+                    if (_relevance == maxNumber)
+                        Console.WriteLine($"{((char)_suit)}{((int)_relevance)}");
+                    else
+                        Console.WriteLine($"{((char)_suit)} {((int)_relevance)}");
+                }
+                else
+                {
+                    if (_relevance == maxNumber)
+                    {
+                        Console.WriteLine($"{((char)_suit)}{_relevance}");
+                    }
+                    else
+                        Console.WriteLine($"{((char)_suit)} {_relevance}");
+                }
+            }
+
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
+        public int CardValue()
+        {
+            switch (_relevance)
+            {
+                case Rank.Two:
+                case Rank.Three:
+                case Rank.Four:
+                case Rank.Five:
+                case Rank.Six:
+                case Rank.Seven:
+                case Rank.Eight:
+                case Rank.Nine:
+                case Rank.Ten:
+                    _value = ((int)_relevance);
+                    break;
+
+                case Rank.J:
+                case Rank.Q:
+                case Rank.K:
+                    _value = 10;
+                    break;
+
+                case Rank.A:
+                    _value = 11;
+                    break;
+            }
+
+            return _value;
+        }
+    }
+
+    class Player
+    {
+        private List<Card> _cards = new List<Card>();
+        private int sumAllCard;
+
+        public void DialCards(Card card)
+        {
+            _cards.Add(card);
+            sumAllCard = DeckSum();
+        }
+
+        public void ShowInfoHand()
+        {
+            Console.Clear();
+
+            for (int i = 0; i < _cards.Count; i++)
+            {
+                _cards[i].ShowInfo();
+            }
+
+            Console.WriteLine($"Сумма всех карт: {sumAllCard}");
+            Console.ReadKey();
+        }
+
+        public int DeckSum()
+        {
+            int valueCard;
+            int sum = 0;
+
+            foreach (Card card in _cards)
+            {
+                valueCard = card.CardValue();
+                sum += valueCard;
+            }
+
+            return sum;
+        }
+    }
+}
