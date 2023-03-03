@@ -218,10 +218,6 @@ namespace HWCardDeck
 
         private void СreatingDeck()
         {
-
-            //char[] suits = { '♥', '♦', '♠', '♣' };
-            //string[] values = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "V", "Q", "K", "A" };
-
             foreach (Suits suit in (Suits[])Enum.GetValues(typeof(Suits)))
             {
                 foreach (Rank rank in (Suits[])Enum.GetValues(typeof(Rank)))
@@ -230,15 +226,6 @@ namespace HWCardDeck
                     _cards.Add(card);
                 }
             }
-
-            //foreach (var suit in suits)
-            //{
-            //    foreach (var value in values)
-            //    {
-            //        Card card = new Card(suit, value);
-            //        _cards.Add(card);
-            //    }
-            //}
         }
 
         public void ShuffleArray()
