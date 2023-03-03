@@ -54,7 +54,7 @@ namespace HWCardDeck
             int startingCardsQuantity = 2;
 
             deck.ShuffleArray();
-            DealCards(startingCardsQuantity, ref topCard, deck, player);
+            DealCards(startingCardsQuantity, ref topCard, deck, player, true);
             Game(ref topCard, deck, player);
         }
 
@@ -82,7 +82,7 @@ namespace HWCardDeck
                         break;
 
                     case CommandTakingCard:
-                        DealCards(dealCardsQuantity, ref topCard, deck, player);
+                        isWork = DealCards(dealCardsQuantity, ref topCard, deck, player, isWork);
                         break;
 
                     case CommandShowRules:
@@ -130,12 +130,14 @@ namespace HWCardDeck
             return isWork;
         }
 
-        static void DealCards(int numberOfCards, ref Card topCard, Deck deck, Player player)
+        static bool DealCards(int numberOfCards, ref Card topCard, Deck deck, Player player, bool isWork)
         {
+            bool gameover = !isWork;
+
             for (int i = 0; i < numberOfCards; i++)
             {
                 topCard = deck.TakeCard();
-                player.DialCards(topCard);
+                gameover = player.DialCards(topCard);
                 deck.ShuffleArray();
             }
 
@@ -146,6 +148,13 @@ namespace HWCardDeck
                 topCard.ShowInfo();
                 Console.ReadKey();
             }
+
+            if (gameover == true)
+            {
+                isWork = EndGame(player);
+            }
+
+            return isWork;
         }
 
         static void ShowRules()
@@ -209,7 +218,7 @@ namespace HWCardDeck
 
         private void СreatingDeck()
         {
-            
+
             //char[] suits = { '♥', '♦', '♠', '♣' };
             //string[] values = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "V", "Q", "K", "A" };
 
@@ -299,7 +308,7 @@ namespace HWCardDeck
                     else
                         Console.WriteLine($"{((char)_suit)} {_relevance}");
                 }
-                    
+
             }
             else if (_suit == Suits.Hearts || _suit == Suits.Diamonds)
             {
@@ -364,10 +373,17 @@ namespace HWCardDeck
         private List<Card> _cards = new List<Card>();
         private int sumAllCard;
 
-        public void DialCards(Card card)
+        public bool DialCards(Card card)
         {
+            bool gameover = false;
+
             _cards.Add(card);
             sumAllCard = DeckSum();
+
+            if (sumAllCard > 21)
+                gameover = true;
+
+            return gameover;
         }
 
         public void ShowInfoHand()
