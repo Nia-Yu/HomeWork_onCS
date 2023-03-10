@@ -9,6 +9,8 @@ namespace HWCardDeck
         {
             Console.CursorVisible = false;
 
+            Game gamePoint = new Game();
+
             bool gameWorks = true;
             string userInput;
 
@@ -17,7 +19,7 @@ namespace HWCardDeck
 
             Console.WriteLine("Игра 21 очко.\n");
             Console.ReadKey();
-            ShowRules();
+            gamePoint.ShowRules();
 
             while (gameWorks)
             {
@@ -30,7 +32,7 @@ namespace HWCardDeck
                 {
                     gameWorks = true;
                     Console.Clear();
-                    StartGame();
+                    gamePoint.StartGame();
                 }
                 else if (userInput == AnswerNo)
                 {
@@ -44,21 +46,28 @@ namespace HWCardDeck
                 }
             }
         }
+    }
 
-        static void StartGame()
+    class Game
+    {
+        private Dictionary<Card, int> _valueCards = new Dictionary<Card, int>();
+        private int _winPoints = 21;
+
+        public void StartGame()
         {
-            Deck deck = new Deck();
             Player player = new Player();
+            Deck deck = new Deck();
             Card topCard = null;
 
             int startingCardsQuantity = 2;
 
-            deck.ShuffleArray();
+            deck.ShuffleDeck();
+            AssignValueCards(deck);
             DealCards(startingCardsQuantity, ref topCard, deck, player, true);
-            Game(ref topCard, deck, player);
+            Play(ref topCard, deck, player);
         }
 
-        static void Game(ref Card topCard, Deck deck, Player player)
+        public void Play(ref Card topCard, Deck deck, Player player)
         {
             bool isWork = true;
             int dealCardsQuantity = 1;
@@ -90,7 +99,7 @@ namespace HWCardDeck
                         break;
 
                     case CommandGameOver:
-                        isWork = EndGame(player);
+                        isWork = FinishGame(player);
                         break;
 
                     default:
@@ -103,11 +112,11 @@ namespace HWCardDeck
             }
         }
 
-        static bool EndGame(Player player)
+        public bool FinishGame(Player player)
         {
             bool isWork = false;
             int maxPoints = 21;
-            int playerPoints = player.DeckSum();
+            int playerPoints = CalculateSumDeck(player.Cards);
 
             if (playerPoints > maxPoints)
             {
@@ -130,15 +139,100 @@ namespace HWCardDeck
             return isWork;
         }
 
-        static bool DealCards(int numberOfCards, ref Card topCard, Deck deck, Player player, bool isWork)
+        public void AssignValueCards(Deck deck)
+        {
+            List<Card> cards = deck.GetDesk();
+
+            const int ValueTwo = 2;
+            const int ValueThree = 3;
+            const int ValueFour = 4;
+            const int ValueFive = 5;
+            const int ValueSix = 6;
+            const int ValueSeven = 7;
+            const int ValueEight = 8;
+            const int ValueNine = 9;
+            const int ValueHighCards = 10;
+            const int MaxValue = 11;
+
+            foreach (Card card in cards)
+            {
+                switch (card.Relevance)
+                {
+                    case Rank.Two:
+                        _valueCards.Add(card, ValueTwo);
+                        break;
+
+                    case Rank.Three:
+                        _valueCards.Add(card, ValueThree);
+                        break;
+
+                    case Rank.Four:
+                        _valueCards.Add(card, ValueFour);
+                        break;
+
+                    case Rank.Five:
+                        _valueCards.Add(card, ValueFive);
+                        break;
+
+                    case Rank.Six:
+                        _valueCards.Add(card, ValueSix);
+                        break;
+
+                    case Rank.Seven:
+                        _valueCards.Add(card, ValueSeven);
+                        break;
+
+                    case Rank.Eight:
+                        _valueCards.Add(card, ValueEight);
+                        break;
+
+                    case Rank.Nine:
+                        _valueCards.Add(card, ValueNine);
+                        break;
+
+                    case Rank.Ten:
+                    case Rank.J:
+                    case Rank.Q:
+                    case Rank.K:
+                        _valueCards.Add(card, ValueHighCards);
+                        break;
+
+                    case Rank.A:
+                        _valueCards.Add(card, MaxValue);
+                        break;
+                }
+            }
+        }
+
+        public int CalculateSumDeck(List<Card> cards)
+        {
+            int valueCard;
+            int sum = 0;
+
+            foreach (Card card in cards)
+            {
+                valueCard = _valueCards[card];
+                sum += valueCard;
+            }
+
+            return sum;
+        }
+
+        public bool DealCards(int numberOfCards, ref Card topCard, Deck deck, Player player, bool isWork)
         {
             bool gameover = !isWork;
 
             for (int i = 0; i < numberOfCards; i++)
             {
-                topCard = deck.TakeCard();
-                gameover = player.DialCards(topCard);
-                deck.ShuffleArray();
+                topCard = deck.GetCard();
+                player.DrawCards(topCard);
+
+                if (CalculateSumDeck(player.Cards) >= _winPoints)
+                {
+                    gameover = true;
+                }
+
+                deck.ShuffleDeck();
             }
 
             if (numberOfCards == 1)
@@ -151,13 +245,13 @@ namespace HWCardDeck
 
             if (gameover == true)
             {
-                isWork = EndGame(player);
+                isWork = FinishGame(player);
             }
 
             return isWork;
         }
 
-        static void ShowRules()
+        public void ShowRules()
         {
             Console.Clear();
             Console.WriteLine("Правила\n\n" + new string('-', 50));
@@ -172,7 +266,7 @@ namespace HWCardDeck
             Console.ReadKey();
         }
 
-        static void ShowMenu(string CommandShowInfo, string CommandTakingCard, string CommandGameOver, string CommandShowRules)
+        public void ShowMenu(string CommandShowInfo, string CommandTakingCard, string CommandGameOver, string CommandShowRules)
         {
             Console.WriteLine($"{CommandShowInfo} - Посмотреть карты в руке" +
                 $"\n{CommandTakingCard} - Вытянуть еще карту из колоды" +
@@ -213,10 +307,10 @@ namespace HWCardDeck
         public Deck()
         {
             _cards = new List<Card>();
-            СreatingDeck();
+            CreateDeck();
         }
 
-        private void СreatingDeck()
+        private void CreateDeck()
         {
             foreach (Suits suit in (Suits[])Enum.GetValues(typeof(Suits)))
             {
@@ -228,20 +322,20 @@ namespace HWCardDeck
             }
         }
 
-        public void ShuffleArray()
+        public void ShuffleDeck()
         {
             Random random = new Random();
 
             for (int i = _cards.Count - 1; i >= 0; i--)
             {
-                int randomElement = random.Next(i);
-                Card shuffledElement = _cards[randomElement];
-                _cards[randomElement] = _cards[i];
-                _cards[i] = shuffledElement;
+                int randomCard = random.Next(_cards.Count);
+                Card shuffledCard = _cards[randomCard];
+                _cards[randomCard] = _cards[i];
+                _cards[i] = shuffledCard;
             }
         }
 
-        public Card TakeCard()
+        public Card GetCard()
         {
             Card topCard = _cards[_cards.Count - 1];
             _cards.RemoveAt(_cards.Count - 1);
@@ -249,155 +343,108 @@ namespace HWCardDeck
             return topCard;
         }
 
-        public void ShowInfoDesk()
+        public List<Card> GetDesk()
         {
+            List<Card> deckCards = new List<Card>();
+
             for (int i = 0; i < _cards.Count; i++)
             {
-                _cards[i].ShowInfo();
+                deckCards.Add(_cards[i]);
             }
+
+            return deckCards;
         }
     }
 
     class Card
     {
-        private Suits _suit;
-        private Rank _relevance;
-        private int _value;
+        public Suits Suit { get; private set; }
+        public Rank Relevance { get; private set; }
 
         public Card(Suits suit, Rank relevance)
         {
-            _suit = suit;
-            _relevance = relevance;
+            Suit = suit;
+            Relevance = relevance;
         }
 
         public void ShowInfo()
         {
             Rank maxNumber = Rank.Ten;
 
-            if (_suit == Suits.Spades || _suit == Suits.Clubs)
+            if (Suit == Suits.Spades || Suit == Suits.Clubs)
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.Black;
 
-                if (_relevance <= maxNumber)
+                if (Relevance <= maxNumber)
                 {
-                    if (_relevance == maxNumber)
+                    if (Relevance == maxNumber)
                     {
-                        Console.WriteLine($"{((char)_suit)}{((int)_relevance)}");
+                        Console.WriteLine($"{((char)Suit)}{((int)Relevance)}");
                     }
                     else
-                        Console.WriteLine($"{((char)_suit)} {((int)_relevance)}");
+                        Console.WriteLine($"{((char)Suit)} {((int)Relevance)}");
                 }
                 else
                 {
-                    if (_relevance == maxNumber)
-                        Console.WriteLine($"{((char)_suit)}{_relevance}");
+                    if (Relevance == maxNumber)
+                        Console.WriteLine($"{((char)Suit)}{Relevance}");
                     else
-                        Console.WriteLine($"{((char)_suit)} {_relevance}");
+                        Console.WriteLine($"{((char)Suit)} {Relevance}");
                 }
 
             }
-            else if (_suit == Suits.Hearts || _suit == Suits.Diamonds)
+            else if (Suit == Suits.Hearts || Suit == Suits.Diamonds)
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.Red;
 
-                if (_relevance <= maxNumber)
+                if (Relevance <= maxNumber)
                 {
-                    if (_relevance == maxNumber)
-                        Console.WriteLine($"{((char)_suit)}{((int)_relevance)}");
+                    if (Relevance == maxNumber)
+                        Console.WriteLine($"{((char)Suit)}{((int)Relevance)}");
                     else
-                        Console.WriteLine($"{((char)_suit)} {((int)_relevance)}");
+                        Console.WriteLine($"{((char)Suit)} {((int)Relevance)}");
                 }
                 else
                 {
-                    if (_relevance == maxNumber)
+                    if (Relevance == maxNumber)
                     {
-                        Console.WriteLine($"{((char)_suit)}{_relevance}");
+                        Console.WriteLine($"{((char)Suit)}{Relevance}");
                     }
                     else
-                        Console.WriteLine($"{((char)_suit)} {_relevance}");
+                        Console.WriteLine($"{((char)Suit)} {Relevance}");
                 }
             }
 
             Console.ResetColor();
             Console.WriteLine();
         }
-
-        public int CardValue()
-        {
-            switch (_relevance)
-            {
-                case Rank.Two:
-                case Rank.Three:
-                case Rank.Four:
-                case Rank.Five:
-                case Rank.Six:
-                case Rank.Seven:
-                case Rank.Eight:
-                case Rank.Nine:
-                case Rank.Ten:
-                    _value = ((int)_relevance);
-                    break;
-
-                case Rank.J:
-                case Rank.Q:
-                case Rank.K:
-                    _value = 10;
-                    break;
-
-                case Rank.A:
-                    _value = 11;
-                    break;
-            }
-
-            return _value;
-        }
     }
 
     class Player
     {
-        private List<Card> _cards = new List<Card>();
-        private int sumAllCard;
+        public List<Card> Cards { get; private set; }
 
-        public bool DialCards(Card card)
+        public Player()
         {
-            bool gameover = false;
+            Cards = new List<Card>();
+        }
 
-            _cards.Add(card);
-            sumAllCard = DeckSum();
-
-            if (sumAllCard > 21)
-                gameover = true;
-
-            return gameover;
+        public void DrawCards(Card card)
+        {
+            Cards.Add(card);
         }
 
         public void ShowInfoHand()
         {
             Console.Clear();
 
-            for (int i = 0; i < _cards.Count; i++)
+            for (int i = 0; i < Cards.Count; i++)
             {
-                _cards[i].ShowInfo();
+                Cards[i].ShowInfo();
             }
-
-            Console.WriteLine($"Сумма всех карт: {sumAllCard}");
             Console.ReadKey();
-        }
-
-        public int DeckSum()
-        {
-            int valueCard;
-            int sum = 0;
-
-            foreach (Card card in _cards)
-            {
-                valueCard = card.CardValue();
-                sum += valueCard;
-            }
-
-            return sum;
         }
     }
 }
