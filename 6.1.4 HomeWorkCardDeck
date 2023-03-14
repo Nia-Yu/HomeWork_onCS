@@ -23,53 +23,48 @@ namespace HWCardDeck
 
             while (gameWorks)
             {
+                Console.Clear();
+
                 Console.WriteLine($"Начать игру?" +
                 $"\n{AnswerYes}" +
                 $"\n{AnswerNo}\n");
                 userInput = Console.ReadLine();
 
+                gamePoint = new Game();
+                Console.Clear();
+
                 if (userInput == AnswerYes)
-                {
-                    gameWorks = true;
-                    Console.Clear();
-                    gamePoint.StartGame();
-                }
+                    gamePoint.StartPlay();
                 else if (userInput == AnswerNo)
-                {
-                    Console.Clear();
                     gameWorks = false;
-                }
                 else
-                {
-                    Console.Clear();
                     Console.WriteLine("Не корректный ввод.\n");
-                }
+
             }
         }
     }
 
     class Game
     {
-        private readonly Dictionary<Card, int> _valueCards = new Dictionary<Card, int>();
         private readonly Player _player = new Player();
         private readonly Deck _deck = new Deck();
-        private readonly int _winPoints = 21;
         private readonly List<Card> _handPlayer = new List<Card>();
+        private readonly Dictionary<Card, int> _valueCards = new Dictionary<Card, int>();
+        private readonly int _winPoints = 21;
 
-        public void StartGame()
+        public void StartPlay()
         {
-
             Card topCard = null;
 
             int startingCardsQuantity = 2;
 
-            _deck.ShuffleDeck();
+            _deck.Shuffle();
             AssignValueCards();
-            DealCards(startingCardsQuantity, ref topCard, true);
-            Play(ref topCard);
+            DealCards(startingCardsQuantity, topCard, true);
+            Play(topCard);
         }
 
-        public void Play(ref Card topCard)
+        public void Play(Card topCard)
         {
             bool isWork = true;
             int dealCardsQuantity = 1;
@@ -93,7 +88,7 @@ namespace HWCardDeck
                         break;
 
                     case CommandTakingCard:
-                        isWork = DealCards(dealCardsQuantity, ref topCard, isWork);
+                        isWork = DealCards(dealCardsQuantity, topCard, isWork);
                         break;
 
                     case CommandShowRules:
@@ -101,7 +96,7 @@ namespace HWCardDeck
                         break;
 
                     case CommandGameOver:
-                        isWork = FinishGame();
+                        isWork = FinishPlay();
                         break;
 
                     default:
@@ -114,7 +109,7 @@ namespace HWCardDeck
             }
         }
 
-        public bool FinishGame()
+        public bool FinishPlay()
         {
             bool isWork = false;
             int maxPoints = 21;
@@ -143,7 +138,9 @@ namespace HWCardDeck
 
         public List<Card> GetCardsInHand()
         {
-            for (int i =0; i < _player.GetCardsCount(); i++)
+            _handPlayer.Clear();
+
+            for (int i = 0; i < _player.GetCardsCount(); i++)
             {
                 _handPlayer.Add(_player.GetCardById(i));
             }
@@ -153,7 +150,7 @@ namespace HWCardDeck
 
         public void AssignValueCards()
         {
-            List<Card> cards = _deck.GetDesk();
+            List<Card> cards = _deck.GetAllCards();
 
             const int ValueTwo = 2;
             const int ValueThree = 3;
@@ -230,21 +227,23 @@ namespace HWCardDeck
             return sum;
         }
 
-        public bool DealCards(int numberOfCards, ref Card topCard, bool isWork)
+        public bool DealCards(int numberOfCards, Card topCard, bool isWork)
         {
             bool gameover = !isWork;
+            int pointPlayer;
 
             for (int i = 0; i < numberOfCards; i++)
             {
                 topCard = _deck.GetCard();
                 _player.DrawCards(topCard);
+                pointPlayer = CalculateSumDeck(GetCardsInHand());
 
-                if (CalculateSumDeck(GetCardsInHand()) >= _winPoints)
+                if (pointPlayer >= _winPoints)
                 {
                     gameover = true;
                 }
 
-                _deck.ShuffleDeck();
+                _deck.Shuffle();
             }
 
             if (numberOfCards == 1)
@@ -257,7 +256,7 @@ namespace HWCardDeck
 
             if (gameover == true)
             {
-                isWork = FinishGame();
+                isWork = FinishPlay();
             }
 
             return isWork;
@@ -319,10 +318,10 @@ namespace HWCardDeck
         public Deck()
         {
             _cards = new List<Card>();
-            CreateDeck();
+            Create();
         }
 
-        private void CreateDeck()
+        private void Create()
         {
             foreach (Suits suit in (Suits[])Enum.GetValues(typeof(Suits)))
             {
@@ -334,7 +333,7 @@ namespace HWCardDeck
             }
         }
 
-        public void ShuffleDeck()
+        public void Shuffle()
         {
             Random random = new Random();
 
@@ -353,7 +352,7 @@ namespace HWCardDeck
             return topCard;
         }
 
-        public List<Card> GetDesk()
+        public List<Card> GetAllCards()
         {
             List<Card> deckCards = new List<Card>();
 
