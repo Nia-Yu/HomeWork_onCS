@@ -1,0 +1,16 @@
+C:\Users\Nika\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.exe.config
+C:\Users\Nika\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.exe
+C:\Users\Nika\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.pdb
+C:\Users\Nika\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.AssemblyReference.cache
+C:\Users\Nika\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.SuggestedBindingRedirects.cache
+C:\Users\Nika\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.CoreCompileInputs.cache
+C:\Users\Nika\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.exe
+C:\Users\Nika\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.pdb
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.exe.config
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.exe
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\bin\Debug\ConsoleApp3.pdb
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.AssemblyReference.cache
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.SuggestedBindingRedirects.cache
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.csproj.CoreCompileInputs.cache
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.exe
+C:\Users\belou\OneDrive\Документы\Visual Studio 2022\source\repos\ConsoleApp3\obj\Debug\ConsoleApp3.pdb
