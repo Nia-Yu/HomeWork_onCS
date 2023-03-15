@@ -33,15 +33,15 @@ namespace HWBookStorage
 
         public Storage()
         {
-            _library.Add(new Book(0, "Ольга Гусейнова", "Путевой светлячок", 2016, Genre.Fantasy, null));
-            _library.Add(new Book(1, "Ольга Гусейнова", "Второй шанс для Елены", 2018, Genre.Fantasy, "Венчанные огнём"));
-            _library.Add(new Book(2, "Ольга Гусейнова", "Второй шанс для Юлии", 2019, Genre.Fantasy, "Венчанные огнём"));
-            _library.Add(new Book(3, "Ольга Гусейнова", "Второй шанс для Алев", 2019, Genre.Fantasy, "Венчанные огнём"));
-            _library.Add(new Book(4, "Михаил Булгаков", "Мастер и Маргарита", 1928, Genre.Romance, null));
-            _library.Add(new Book(5, "Джон Рональд Руэл Толкин", "Братство Кольца", 1954, Genre.Fantasy, "Властелин колец"));
-            _library.Add(new Book(6, "Джон Рональд Руэл Толкин", "Две крепости", 1954, Genre.Fantasy, "Властелин колец"));
-            _library.Add(new Book(7, "Джон Рональд Руэл Толкин", "Возвращение короля", 1954, Genre.Fantasy, "Властелин колец"));
-            _library.Add(new Book(8, "Екатерина Коути", "Недобрая старая Англия", 2015, Genre.History, "Окно в историю"));
+            _library.Add(new Book("Ольга Гусейнова", "Путевой светлячок", 2016, Genre.Fantasy, null));
+            _library.Add(new Book("Ольга Гусейнова", "Второй шанс для Елены", 2018, Genre.Fantasy, "Венчанные огнём"));
+            _library.Add(new Book("Ольга Гусейнова", "Второй шанс для Юлии", 2019, Genre.Fantasy, "Венчанные огнём"));
+            _library.Add(new Book("Ольга Гусейнова", "Второй шанс для Алев", 2019, Genre.Fantasy, "Венчанные огнём"));
+            _library.Add(new Book("Михаил Булгаков", "Мастер и Маргарита", 1928, Genre.Romance, null));
+            _library.Add(new Book("Джон Рональд Руэл Толкин", "Братство Кольца", 1954, Genre.Fantasy, "Властелин колец"));
+            _library.Add(new Book("Джон Рональд Руэл Толкин", "Две крепости", 1954, Genre.Fantasy, "Властелин колец"));
+            _library.Add(new Book("Джон Рональд Руэл Толкин", "Возвращение короля", 1954, Genre.Fantasy, "Властелин колец"));
+            _library.Add(new Book("Екатерина Коути", "Недобрая старая Англия", 2015, Genre.History, "Окно в историю"));
         }
 
         public void ShowMenu()
@@ -121,7 +121,7 @@ namespace HWBookStorage
             else
                 series = userInput;
 
-            Book book = new Book(_library.Count, author, title, year, (Genre)genre, series);
+            Book book = new Book(author, title, year, (Genre)genre, series);
             _library.Add(book);
         }
 
@@ -192,9 +192,10 @@ namespace HWBookStorage
 
         public void ShowInfoBooks()
         {
-            foreach (var book in _library)
+            for (int i = 0; i < _library.Count; i++)
             {
-                book.ShowInfo();
+                Console.Write($"{i + 1} ");
+                _library[i].ShowInfo();
             }
 
             Console.ReadKey();
@@ -329,6 +330,7 @@ namespace HWBookStorage
 
             Console.ReadKey();
         }
+
         private void ShowMessageError()
         {
             Console.WriteLine("Ни одной книги не найдено!");
@@ -397,13 +399,10 @@ namespace HWBookStorage
             {
                 int numberId = ReadIntNumber();
 
-                foreach (var book in _library)
+                if (numberId > 0 && numberId - 1 < _library.Count)
                 {
-                    if (book.IdNumber == numberId - 1)
-                    {
-                        bookFound = book;
-                        isCheck = false;
-                    }
+                    bookFound = _library[numberId - 1];
+                    isCheck = false;
                 }
 
                 if (bookFound == null)
@@ -419,9 +418,8 @@ namespace HWBookStorage
 
         class Book
         {
-            public Book(int id, string author, string title, int year, Genre genre, string series)
+            public Book(string author, string title, int year, Genre genre, string series)
             {
-                IdNumber = id;
                 Author = author;
                 Title = title;
                 Year = year;
@@ -429,7 +427,6 @@ namespace HWBookStorage
                 Series = series;
             }
 
-            public int IdNumber { get; private set; }
             public string Author { get; private set; }
             public string Title { get; private set; }
             public int Year { get; private set; }
@@ -439,9 +436,9 @@ namespace HWBookStorage
             public void ShowInfo()
             {
                 if (Series != null)
-                    Console.WriteLine($"{IdNumber + 1} {Author} - {Title}. Серия {Series}. Год выпуска {Year}. Жанр: {Genre}");
+                    Console.WriteLine($"{Author} - {Title}. Серия {Series}. Год выпуска {Year}. Жанр: {Genre}");
                 else
-                    Console.WriteLine($"{IdNumber + 1} {Author} - {Title}. Год выпуска {Year}. Жанр: {Genre}");
+                    Console.WriteLine($"{Author} - {Title}. Год выпуска {Year}. Жанр: {Genre}");
             }
         }
     }
