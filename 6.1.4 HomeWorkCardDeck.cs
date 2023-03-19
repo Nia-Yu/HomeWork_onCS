@@ -9,19 +9,18 @@ namespace HWCardDeck
         {
             Console.CursorVisible = false;
 
-            Game gamePoint = new Game();
-
-            bool gameWorks = true;
-            string userInput;
-
             const string AnswerYes = "y";
             const string AnswerNo = "n";
+
+            Game gamePoint = new Game();
+            bool isGameWorks = true;
+            string userInput;
 
             Console.WriteLine("Игра 21 очко.\n");
             Console.ReadKey();
             gamePoint.ShowRules();
 
-            while (gameWorks)
+            while (isGameWorks)
             {
                 Console.Clear();
 
@@ -36,10 +35,9 @@ namespace HWCardDeck
                 if (userInput == AnswerYes)
                     gamePoint.StartPlay();
                 else if (userInput == AnswerNo)
-                    gameWorks = false;
+                    isGameWorks = false;
                 else
                     Console.WriteLine("Не корректный ввод.\n");
-
             }
         }
     }
@@ -54,17 +52,15 @@ namespace HWCardDeck
 
         public void StartPlay()
         {
-            Card topCard = null;
-
             int startingCardsQuantity = 2;
 
             _deck.Shuffle();
             AssignValueCards();
-            DealCards(startingCardsQuantity, topCard, true);
-            Play(topCard);
+            DealCards(startingCardsQuantity, true);
+            Play();
         }
 
-        public void Play(Card topCard)
+        public void Play()
         {
             bool isWork = true;
             int dealCardsQuantity = 1;
@@ -88,7 +84,7 @@ namespace HWCardDeck
                         break;
 
                     case CommandTakingCard:
-                        isWork = DealCards(dealCardsQuantity, topCard, isWork);
+                        isWork = DealCards(dealCardsQuantity, isWork);
                         break;
 
                     case CommandShowRules:
@@ -113,7 +109,7 @@ namespace HWCardDeck
         {
             bool isWork = false;
             int maxPoints = 21;
-            int playerPoints = CalculateSumDeck(GetCardsInHand());
+            int playerPoints = CalculateSumDeck(_player.GetCopyHand());
 
             if (playerPoints > maxPoints)
             {
@@ -136,22 +132,8 @@ namespace HWCardDeck
             return isWork;
         }
 
-        public List<Card> GetCardsInHand()
-        {
-            _handPlayer.Clear();
-
-            for (int i = 0; i < _player.GetCardsCount(); i++)
-            {
-                _handPlayer.Add(_player.GetCardById(i));
-            }
-
-            return _handPlayer;
-        }
-
         public void AssignValueCards()
         {
-            List<Card> cards = _deck.GetAllCards();
-
             const int ValueTwo = 2;
             const int ValueThree = 3;
             const int ValueFour = 4;
@@ -162,6 +144,8 @@ namespace HWCardDeck
             const int ValueNine = 9;
             const int ValueHighCards = 10;
             const int MaxValue = 11;
+
+            List<Card> cards = _deck.GetAllCards();
 
             foreach (Card card in cards)
             {
@@ -227,20 +211,21 @@ namespace HWCardDeck
             return sum;
         }
 
-        public bool DealCards(int numberOfCards, Card topCard, bool isWork)
+        public bool DealCards(int numberOfCards, bool isWork)
         {
-            bool gameover = !isWork;
+            Card topCard = null;
+            bool isGameOver = !isWork;
             int pointPlayer;
 
             for (int i = 0; i < numberOfCards; i++)
             {
-                topCard = _deck.GetCard();
-                _player.DrawCards(topCard);
-                pointPlayer = CalculateSumDeck(GetCardsInHand());
+                topCard = _deck.GiveCard();
+                _player.TakeCard(topCard);
+                pointPlayer = CalculateSumDeck(_player.GetCopyHand());
 
                 if (pointPlayer >= _winPoints)
                 {
-                    gameover = true;
+                    isGameOver = true;
                 }
 
                 _deck.Shuffle();
@@ -254,7 +239,7 @@ namespace HWCardDeck
                 Console.ReadKey();
             }
 
-            if (gameover == true)
+            if (isGameOver == true)
             {
                 isWork = FinishPlay();
             }
@@ -323,9 +308,12 @@ namespace HWCardDeck
 
         private void Create()
         {
-            foreach (Suits suit in (Suits[])Enum.GetValues(typeof(Suits)))
+            Suits[] suits = (Suits[])Enum.GetValues(typeof(Suits));
+            Rank[] ranks = (Rank[])Enum.GetValues(typeof(Rank));
+
+            foreach (Suits suit in suits)
             {
-                foreach (Rank rank in (Rank[])Enum.GetValues(typeof(Rank)))
+                foreach (Rank rank in ranks)
                 {
                     Card card = new Card(suit, rank);
                     _cards.Add(card);
@@ -344,7 +332,7 @@ namespace HWCardDeck
             }
         }
 
-        public Card GetCard()
+        public Card GiveCard()
         {
             Card topCard = _cards[_cards.Count - 1];
             _cards.Remove(topCard);
@@ -431,7 +419,7 @@ namespace HWCardDeck
     {
         private readonly List<Card> _cards = new List<Card>();
 
-        public void DrawCards(Card card)
+        public void TakeCard(Card card)
         {
             _cards.Add(card);
         }
@@ -448,14 +436,9 @@ namespace HWCardDeck
             Console.ReadKey();
         }
 
-        public int GetCardsCount()
-        {
-            return _cards.Count;
-        }
-
-        public Card GetCardById(int id)
-        {
-            return _cards[id];
-        }
+        public List<Card> GetCopyHand() 
+        { 
+            return new List<Card>(_cards); 
+        } 
     }
 }
