@@ -46,17 +46,29 @@ namespace HWCardDeck
     {
         private readonly Player _player = new Player();
         private readonly Deck _deck = new Deck();
-        private readonly List<Card> _handPlayer = new List<Card>();
-        private readonly Dictionary<Card, int> _valueCards = new Dictionary<Card, int>();
         private readonly int _winPoints = 21;
+        private readonly int _startingCardsQuantity = 2;
+        private readonly Dictionary<Rank, int> _valueCards = new Dictionary<Rank, int>()
+        {
+            [Rank.Two] = 2,
+            [Rank.Three] = 3,
+            [Rank.Four] = 4,
+            [Rank.Five] = 5,
+            [Rank.Six] = 6,
+            [Rank.Seven] = 7,
+            [Rank.Eight] = 8,
+            [Rank.Nine] = 9,
+            [Rank.Ten] = 10,
+            [Rank.J] = 10,
+            [Rank.Q] = 10,
+            [Rank.K] = 10,
+            [Rank.A] = 11
+                    };
 
         public void StartPlay()
         {
-            int startingCardsQuantity = 2;
-
             _deck.Shuffle();
-            AssignValueCards();
-            DealCards(startingCardsQuantity, true);
+            DealCards(_startingCardsQuantity, true);
             Play();
         }
 
@@ -132,71 +144,6 @@ namespace HWCardDeck
             return isWork;
         }
 
-        public void AssignValueCards()
-        {
-            const int ValueTwo = 2;
-            const int ValueThree = 3;
-            const int ValueFour = 4;
-            const int ValueFive = 5;
-            const int ValueSix = 6;
-            const int ValueSeven = 7;
-            const int ValueEight = 8;
-            const int ValueNine = 9;
-            const int ValueHighCards = 10;
-            const int MaxValue = 11;
-
-            List<Card> cards = _deck.GetAllCards();
-
-            foreach (Card card in cards)
-            {
-                switch (card.Relevance)
-                {
-                    case Rank.Two:
-                        _valueCards.Add(card, ValueTwo);
-                        break;
-
-                    case Rank.Three:
-                        _valueCards.Add(card, ValueThree);
-                        break;
-
-                    case Rank.Four:
-                        _valueCards.Add(card, ValueFour);
-                        break;
-
-                    case Rank.Five:
-                        _valueCards.Add(card, ValueFive);
-                        break;
-
-                    case Rank.Six:
-                        _valueCards.Add(card, ValueSix);
-                        break;
-
-                    case Rank.Seven:
-                        _valueCards.Add(card, ValueSeven);
-                        break;
-
-                    case Rank.Eight:
-                        _valueCards.Add(card, ValueEight);
-                        break;
-
-                    case Rank.Nine:
-                        _valueCards.Add(card, ValueNine);
-                        break;
-
-                    case Rank.Ten:
-                    case Rank.J:
-                    case Rank.Q:
-                    case Rank.K:
-                        _valueCards.Add(card, ValueHighCards);
-                        break;
-
-                    case Rank.A:
-                        _valueCards.Add(card, MaxValue);
-                        break;
-                }
-            }
-        }
-
         public int CalculateSumDeck(List<Card> cards)
         {
             int valueCard;
@@ -204,7 +151,7 @@ namespace HWCardDeck
 
             foreach (Card card in cards)
             {
-                valueCard = _valueCards[card];
+                valueCard = _valueCards[card.Relevance];
                 sum += valueCard;
             }
 
@@ -252,12 +199,12 @@ namespace HWCardDeck
             Console.Clear();
             Console.WriteLine("Правила\n\n" + new string('-', 50));
             Console.WriteLine($"Есть колода карт." +
-                $"\nВам выдано 2 карты в руку." +
+                $"\nВам выдано {_startingCardsQuantity} карты в руку." +
                 $"\nДалее Вы можете: " +
                 $"\nПосмотреть карты в руке, вытянуть еще карту, " +
                 $"\nили закончить игру." +
                 $"\nКолода после каждой вытянутой карты перетасовывается." +
-                $"\nЕсли вы вытяните в общей сумме больше чем 21 очко, вы проиграете!");
+                $"\nЕсли вы вытяните в общей сумме больше чем {_winPoints} очко, вы проиграете!");
             Console.WriteLine(new string('-', 50) + "\n");
             Console.ReadKey();
         }
@@ -355,20 +302,21 @@ namespace HWCardDeck
 
     class Card
     {
+        private readonly Suits _suit;
+
         public Card(Suits suit, Rank relevance)
         {
-            Suit = suit;
+            _suit = suit;
             Relevance = relevance;
         }
 
-        public Suits Suit { get; }
         public Rank Relevance { get; }
 
         public void ShowInfo()
         {
             Rank maxNumber = Rank.Ten;
 
-            if (Suit == Suits.Spades || Suit == Suits.Clubs)
+            if (_suit == Suits.Spades || _suit == Suits.Clubs)
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -376,20 +324,20 @@ namespace HWCardDeck
                 if (Relevance <= maxNumber)
                 {
                     if (Relevance == maxNumber)
-                        Console.WriteLine($"{((char)Suit)}{((int)Relevance)}");
+                        Console.WriteLine($"{((char)_suit)}{((int)Relevance)}");
                     else
-                        Console.WriteLine($"{((char)Suit)} {((int)Relevance)}");
+                        Console.WriteLine($"{((char)_suit)} {((int)Relevance)}");
                 }
                 else
                 {
                     if (Relevance == maxNumber)
-                        Console.WriteLine($"{((char)Suit)}{Relevance}");
+                        Console.WriteLine($"{((char)_suit)}{Relevance}");
                     else
-                        Console.WriteLine($"{((char)Suit)} {Relevance}");
+                        Console.WriteLine($"{((char)_suit)} {Relevance}");
                 }
 
             }
-            else if (Suit == Suits.Hearts || Suit == Suits.Diamonds)
+            else if (_suit == Suits.Hearts || _suit == Suits.Diamonds)
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -397,16 +345,16 @@ namespace HWCardDeck
                 if (Relevance <= maxNumber)
                 {
                     if (Relevance == maxNumber)
-                        Console.WriteLine($"{((char)Suit)}{((int)Relevance)}");
+                        Console.WriteLine($"{((char)_suit)}{((int)Relevance)}");
                     else
-                        Console.WriteLine($"{((char)Suit)} {((int)Relevance)}");
+                        Console.WriteLine($"{((char)_suit)} {((int)Relevance)}");
                 }
                 else
                 {
                     if (Relevance == maxNumber)
-                        Console.WriteLine($"{((char)Suit)}{Relevance}");
+                        Console.WriteLine($"{((char)_suit)}{Relevance}");
                     else
-                        Console.WriteLine($"{((char)Suit)} {Relevance}");
+                        Console.WriteLine($"{((char)_suit)} {Relevance}");
                 }
             }
 
@@ -436,9 +384,9 @@ namespace HWCardDeck
             Console.ReadKey();
         }
 
-        public List<Card> GetCopyHand() 
-        { 
-            return new List<Card>(_cards); 
-        } 
+        public List<Card> GetCopyHand()
+        {
+            return new List<Card>(_cards);
+        }
     }
 }
