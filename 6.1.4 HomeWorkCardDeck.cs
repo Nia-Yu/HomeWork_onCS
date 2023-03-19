@@ -361,8 +361,8 @@ namespace HWCardDeck
             Relevance = relevance;
         }
 
-        public Suits Suit { get; private set; }
-        public Rank Relevance { get; private set; }
+        public Suits Suit { get; }
+        public Rank Relevance { get; }
 
         public void ShowInfo()
         {
