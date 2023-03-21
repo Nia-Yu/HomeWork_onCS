@@ -207,7 +207,7 @@ namespace HWBookStorage
         public void ShowGenres()
         {
             int number = 1;
-            Enum[] genres = (Enum[])Enum.GetValues(typeof(Genre));
+            Genre[] genres = (Genre[])Enum.GetValues(typeof(Genre));
 
             foreach (var genre in genres)
             {
