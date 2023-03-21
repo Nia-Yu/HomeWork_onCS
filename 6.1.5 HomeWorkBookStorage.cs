@@ -123,6 +123,7 @@ namespace HWBookStorage
 
             Book book = new Book(author, title, year, (Genre)genre, series);
             _library.Add(book);
+            Console.Write("Книга добавлена!");
         }
 
         public void DeleteBook()
@@ -194,7 +195,9 @@ namespace HWBookStorage
         {
             for (int i = 0; i < _library.Count; i++)
             {
-                Console.Write($"{i + 1} ");
+                int numberBook = i + 1;
+
+                Console.Write($"{numberBook} ");
                 _library[i].ShowInfo();
             }
 
@@ -204,8 +207,9 @@ namespace HWBookStorage
         public void ShowGenres()
         {
             int number = 1;
+            Enum[] genres = (Enum[])Enum.GetValues(typeof(Genre));
 
-            foreach (var genre in Enum.GetValues(typeof(Genre)))
+            foreach (var genre in genres)
             {
                 Console.WriteLine($"{number} - {genre}");
                 number++;
@@ -223,7 +227,7 @@ namespace HWBookStorage
 
             foreach (var book in _library)
             {
-                if (book.Author == author)
+                if (book.Author.ToLower() == author.ToLower())
                 {
                     book.ShowInfo();
                     isFound = true;
@@ -247,7 +251,7 @@ namespace HWBookStorage
 
             foreach (var book in _library)
             {
-                if (book.Title == title)
+                if (book.Title.ToLower() == title.ToLower())
                 {
                     book.ShowInfo();
                     isFound = true;
@@ -318,7 +322,7 @@ namespace HWBookStorage
 
             foreach (var book in _library)
             {
-                if (book.Series == series)
+                if (book.Series.ToLower() == series.ToLower())
                 {
                     book.ShowInfo();
                     isFound = true;
