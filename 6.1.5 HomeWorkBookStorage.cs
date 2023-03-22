@@ -33,6 +33,11 @@ namespace HWBookStorage
 
         public Storage()
         {
+            FillLibrary();
+        }
+
+        private void FillLibrary()
+        {
             _library.Add(new Book("Ольга Гусейнова", "Путевой светлячок", 2016, Genre.Fantasy, null));
             _library.Add(new Book("Ольга Гусейнова", "Второй шанс для Елены", 2018, Genre.Fantasy, "Венчанные огнём"));
             _library.Add(new Book("Ольга Гусейнова", "Второй шанс для Юлии", 2019, Genre.Fantasy, "Венчанные огнём"));
@@ -419,31 +424,30 @@ namespace HWBookStorage
 
             return isCheck;
         }
-
-        class Book
+    }
+    class Book
+    {
+        public Book(string author, string title, int year, Genre genre, string series)
         {
-            public Book(string author, string title, int year, Genre genre, string series)
-            {
-                Author = author;
-                Title = title;
-                Year = year;
-                Genre = genre;
-                Series = series;
-            }
+            Author = author;
+            Title = title;
+            Year = year;
+            Genre = genre;
+            Series = series;
+        }
 
-            public string Author { get; private set; }
-            public string Title { get; private set; }
-            public int Year { get; private set; }
-            public Genre Genre { get; private set; }
-            public string Series { get; private set; }
+        public string Author { get; private set; }
+        public string Title { get; private set; }
+        public int Year { get; private set; }
+        public Genre Genre { get; private set; }
+        public string Series { get; private set; }
 
-            public void ShowInfo()
-            {
-                if (Series != null)
-                    Console.WriteLine($"{Author} - {Title}. Серия {Series}. Год выпуска {Year}. Жанр: {Genre}");
-                else
-                    Console.WriteLine($"{Author} - {Title}. Год выпуска {Year}. Жанр: {Genre}");
-            }
+        public void ShowInfo()
+        {
+            if (Series != null)
+                Console.WriteLine($"{Author} - {Title}. Серия {Series}. Год выпуска {Year}. Жанр: {Genre}");
+            else
+                Console.WriteLine($"{Author} - {Title}. Год выпуска {Year}. Жанр: {Genre}");
         }
     }
 }
