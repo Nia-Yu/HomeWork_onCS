@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace HWCardDeck
+namespace HomeWorkStore
 {
     class Program
     {
-        //Существует продавец, он имеет у себя список товаров, и при нужде, может вам его показать, также продавец может продать вам товар.
-        //После продажи товар переходит к вам, и вы можете также посмотреть свои вещи.
-        //Возможные классы – игрок, продавец, товар.
-        //Вы можете сделать так, как вы видите это.
-
         static void Main(string[] args)
         {
             Seller seller = new Seller(1000);
@@ -19,7 +14,8 @@ namespace HWCardDeck
             while (isWork)
             {
                 const int CommandShowInfoBagSeller = 1;
-                const int CommandShowInfoBagPlayer = 2;
+                const int CommandBuyProduct = 2;
+                const int CommandShowInfoBagPlayer = 3;
                 const int CommandExit = 0;
 
                 int userInput;
@@ -27,7 +23,8 @@ namespace HWCardDeck
                 Console.Clear();
                 Console.WriteLine("Вы встретили торговца.");
                 Console.WriteLine($"Выберите действие. \n" +
-                    $"Попросить торговца показать товары на продажу({CommandShowInfoBagSeller}), " +
+                    $"Попросить торговца показать товары на продажу({CommandShowInfoBagSeller})," +
+                    $"купить товар({CommandBuyProduct}), " +
                     $"посмотреть свой инвентарь({CommandShowInfoBagPlayer}) " +
                     $"или пойти дальше({CommandExit})");
                 userInput = Convert.ToInt32(Console.ReadLine());
@@ -38,12 +35,16 @@ namespace HWCardDeck
                         seller.ShowInfoBag();
                         break;
 
+                    case CommandBuyProduct:
+                        seller.SellProduct(player);
+                        break;
+
                     case CommandShowInfoBagPlayer:
                         player.ShowInfoBag();
                         break;
 
                     case CommandExit:
-                        Console.WriteLine("Вы идете дальше!");
+                        Console.WriteLine("Вы идёте дальше!");
                         isWork = false;
                         break;
 
@@ -54,7 +55,7 @@ namespace HWCardDeck
                 }
 
                 Console.ReadKey();
-            }            
+            }
         }
     }
 
@@ -73,16 +74,6 @@ namespace HWCardDeck
         {
             Inventory.ShowInfo();
         }
-
-        public virtual void SellProduct()
-        {
-
-        }
-
-        public virtual void BuyProduct()
-        {
-
-        }
     }
 
     class Seller : Human
@@ -94,7 +85,7 @@ namespace HWCardDeck
             Inventory.AddProduct(new Product("Зелье силы", 100));
             Inventory.AddProduct(new Product("Крюк Коготь дракона", 250));
             Inventory.AddProduct(new Product("Паутина мао", 125));
-            Inventory.AddProduct(new Product("Меч мертвых", 620));
+            Inventory.AddProduct(new Product("Меч мертвых", 2300));
             Inventory.AddProduct(new Product("Золотое яблоко", 70));
             Inventory.AddProduct(new Product("Свиток призыва: Чёрный кот", 200));
             Inventory.AddProduct(new Product("Броня Лепестки Тьмы", 1270));
@@ -105,6 +96,43 @@ namespace HWCardDeck
             Console.Clear();
             Console.WriteLine("Товары на продажу:");
             base.ShowInfoBag();
+        }
+
+        public void SellProduct(Player player)
+        {
+            ShowInfoBag();
+            int userInput = ReadIntNumber();
+
+            if (Inventory.TryGetProduct(out Product product, ref userInput) == false)
+            {
+                Console.WriteLine($"С вас: {product.Price}");
+
+                if (player.TryBuyProduct(product) == true)
+                {
+                    Inventory.DeleteProduct(userInput);
+                    Wallet.ReceiveCoins(product.Price);
+                    Console.WriteLine("Спасибо за покупку! Приходите еще.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Выбирете товар из списка!");
+            }
+        }
+
+        private int ReadIntNumber()
+        {
+            string userInput = Console.ReadLine();
+            int numberInput;
+
+            while ((int.TryParse(userInput, out numberInput) == false))
+            {
+                Console.WriteLine("Ошибка ввода! Проверьте введенные данные");
+
+                userInput = Console.ReadLine();
+            }
+
+            return numberInput;
         }
     }
 
@@ -120,12 +148,24 @@ namespace HWCardDeck
             Wallet.ShowInfo();
         }
 
-        
+        public bool TryBuyProduct(Product product)
+        {
+            if (Wallet.TryPayCoins(product.Price) == false)
+            {
+                Inventory.AddProduct(product);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     class Inventory
     {
-        private List<Product> _products;
+        private readonly List<Product> _products;
 
         public Inventory()
         {
@@ -139,7 +179,7 @@ namespace HWCardDeck
 
         public void DeleteProduct(int idProduct)
         {
-            _products.RemoveAt(idProduct);
+            _products.RemoveAt(idProduct - 1);
         }
 
         public void ShowInfo()
@@ -151,6 +191,28 @@ namespace HWCardDeck
                 Console.Write($"{idProduct} ");
                 _products[i].ShowInfo();
             }
+        }
+
+        public bool TryGetProduct(out Product productFound, ref int numberId)
+        {
+            productFound = null;
+
+            if (numberId > 0 && numberId - 1 < _products.Count)
+            {
+                productFound = _products[numberId - 1];
+
+                return false;
+            }
+
+            if (productFound == null)
+            {
+                Console.Clear();
+                Console.WriteLine("Ошибка! Такого товара нет.");
+
+                return true;
+            }
+
+            return true;
         }
     }
 
@@ -167,22 +229,44 @@ namespace HWCardDeck
         {
             Console.WriteLine($"\nВ кошельке {_money} монет.");
         }
+
+        public bool TryPayCoins(int price)
+        {
+            if ((_money) >= price)
+            {
+                _money -= price;
+
+                return false;
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("У вас не достаточно средств. Может вы выбирете что то более дешёвое?");
+
+                return true;
+            }
+        }
+
+        public void ReceiveCoins(int price)
+        {
+            _money += price;
+        }
     }
 
     class Product
     {
-        private string _name;
-        private int _price;
+        public string Name { get; private set; }
+        public int Price { get; private set; }
 
         public Product(string name, int price)
         {
-            _name = name;
-            _price = price;
+            Name = name;
+            Price = price;
         }
 
         public void ShowInfo()
         {
-            Console.WriteLine($"{_name} Цена {_price} монет.");
+            Console.WriteLine($"{Name} Цена {Price} монет.");
         }
     }
 }
