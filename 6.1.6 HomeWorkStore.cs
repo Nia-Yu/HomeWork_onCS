@@ -5,6 +5,11 @@ namespace HomeWorkStore
 {
     class Program
     {
+        //Существует продавец, он имеет у себя список товаров, и при нужде, может вам его показать, также продавец может продать вам товар.
+        //После продажи товар переходит к вам, и вы можете также посмотреть свои вещи.
+        //Возможные классы – игрок, продавец, товар.
+        //Вы можете сделать так, как вы видите это.
+
         static void Main(string[] args)
         {
             Seller seller = new Seller(1000);
@@ -102,14 +107,15 @@ namespace HomeWorkStore
         {
             ShowInfoBag();
             int userInput = ReadIntNumber();
+            int idProduct = userInput - 1;
 
-            if (Inventory.TryGetProduct(out Product product, ref userInput) == false)
+            if (Inventory.TryGetProduct(out Product product, idProduct) == false)
             {
                 Console.WriteLine($"С вас: {product.Price}");
 
                 if (player.TryBuyProduct(product) == true)
                 {
-                    Inventory.DeleteProduct(userInput);
+                    Inventory.DeleteProduct(product);
                     Wallet.ReceiveCoins(product.Price);
                     Console.WriteLine("Спасибо за покупку! Приходите еще.");
                 }
@@ -150,7 +156,7 @@ namespace HomeWorkStore
 
         public bool TryBuyProduct(Product product)
         {
-            if (Wallet.TryPayCoins(product.Price) == false)
+            if (Wallet.TryPayCoins(product.Price) == true)
             {
                 Inventory.AddProduct(product);
 
@@ -177,9 +183,9 @@ namespace HomeWorkStore
             _products.Add(product);
         }
 
-        public void DeleteProduct(int idProduct)
+        public void DeleteProduct(Product product)
         {
-            _products.RemoveAt(idProduct - 1);
+            _products.Remove(product);
         }
 
         public void ShowInfo()
@@ -193,7 +199,7 @@ namespace HomeWorkStore
             }
         }
 
-        public bool TryGetProduct(out Product productFound, ref int numberId)
+        public bool TryGetProduct(out Product productFound, int numberId)
         {
             productFound = null;
 
@@ -236,14 +242,14 @@ namespace HomeWorkStore
             {
                 _money -= price;
 
-                return false;
+                return true;
             }
             else
             {
                 Console.Clear();
                 Console.WriteLine("У вас не достаточно средств. Может вы выбирете что то более дешёвое?");
 
-                return true;
+                return false;
             }
         }
 
