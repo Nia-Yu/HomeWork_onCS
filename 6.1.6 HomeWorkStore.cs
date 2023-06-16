@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace HomeWorkStore
+namespace HWStore
 {
     class Program
     {
-        //Существует продавец, он имеет у себя список товаров, и при нужде, может вам его показать, также продавец может продать вам товар.
-        //После продажи товар переходит к вам, и вы можете также посмотреть свои вещи.
-        //Возможные классы – игрок, продавец, товар.
-        //Вы можете сделать так, как вы видите это.
-
         static void Main(string[] args)
         {
             Seller seller = new Seller(1000);
@@ -18,21 +13,21 @@ namespace HomeWorkStore
 
             while (isWork)
             {
-                const int CommandShowInfoBagSeller = 1;
-                const int CommandBuyProduct = 2;
-                const int CommandShowInfoBagPlayer = 3;
-                const int CommandExit = 0;
+                const string CommandShowInfoBagSeller = "1";
+                const string CommandBuyProduct = "2";
+                const string CommandShowInfoBagPlayer = "3";
+                const string CommandExit = "0";
 
-                int userInput;
+                string userInput;
 
                 Console.Clear();
                 Console.WriteLine("Вы встретили торговца.");
                 Console.WriteLine($"Выберите действие. \n" +
-                    $"Попросить торговца показать товары на продажу({CommandShowInfoBagSeller})," +
+                    $"Попросить торговца показать товары на продажу({CommandShowInfoBagSeller}), " +
                     $"купить товар({CommandBuyProduct}), " +
                     $"посмотреть свой инвентарь({CommandShowInfoBagPlayer}) " +
                     $"или пойти дальше({CommandExit})");
-                userInput = Convert.ToInt32(Console.ReadLine());
+                userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
@@ -109,7 +104,7 @@ namespace HomeWorkStore
             int userInput = ReadIntNumber();
             int idProduct = userInput - 1;
 
-            if (Inventory.TryGetProduct(out Product product, idProduct) == false)
+            if (Inventory.TryGetProduct(out Product product, idProduct) == true)
             {
                 Console.WriteLine($"С вас: {product.Price}");
 
@@ -203,11 +198,11 @@ namespace HomeWorkStore
         {
             productFound = null;
 
-            if (numberId > 0 && numberId - 1 < _products.Count)
+            if (numberId >= 0 && numberId < _products.Count)
             {
-                productFound = _products[numberId - 1];
+                productFound = _products[numberId];
 
-                return false;
+                return true;
             }
 
             if (productFound == null)
@@ -215,10 +210,10 @@ namespace HomeWorkStore
                 Console.Clear();
                 Console.WriteLine("Ошибка! Такого товара нет.");
 
-                return true;
+                return false;
             }
 
-            return true;
+            return false;
         }
     }
 
@@ -261,14 +256,14 @@ namespace HomeWorkStore
 
     class Product
     {
-        public string Name { get; private set; }
-        public int Price { get; private set; }
-
         public Product(string name, int price)
         {
             Name = name;
             Price = price;
         }
+
+        public string Name { get; private set; }
+        public int Price { get; private set; }
 
         public void ShowInfo()
         {
