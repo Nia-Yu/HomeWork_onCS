@@ -204,16 +204,13 @@ namespace HWStore
 
                 return true;
             }
-
-            if (productFound == null)
+            else
             {
                 Console.Clear();
                 Console.WriteLine("Ошибка! Такого товара нет.");
 
                 return false;
             }
-
-            return false;
         }
     }
 
