@@ -63,10 +63,11 @@ namespace HWCardDeck
             [Rank.Q] = 10,
             [Rank.K] = 10,
             [Rank.A] = 11
-                    };
+        };
 
         public void StartPlay()
         {
+            //_deck.ShowInfo();
             _deck.Shuffle();
             DealCards(_startingCardsQuantity, true);
             Play();
@@ -297,6 +298,15 @@ namespace HWCardDeck
             }
 
             return deckCards;
+        }
+
+        public void ShowInfo()
+        {
+            for (int i = 0; i < _cards.Count; i++)
+            {
+                _cards[i].ShowInfo();
+            }
+
         }
     }
 
