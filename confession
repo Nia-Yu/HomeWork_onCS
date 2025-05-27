@@ -1,0 +1,67 @@
+using System;
+
+namespace CsRealLearning
+{
+    internal class Program
+    {
+        static void Main()
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+
+            // Создаем экземпляр игрока
+            Player husband = new Player("Алекс");
+
+            // Приветствуем пользователя
+            Console.WriteLine($"Привет, {husband.Name}! ❤️");
+            Console.WriteLine("Давай сыграем в милую игру:\n");
+
+            string answer;
+            bool guessed = false;
+
+            while (!guessed)
+            {
+                Console.WriteLine("Какое число я загадала? (1-5) 💭");
+                answer = Console.ReadLine();
+
+                if (answer == "7")
+                {
+                    husband.GiveBigHug();
+                    guessed = true; // Выходим из цикла
+                }
+                else
+                {
+                    husband.GiveKiss();
+                    Console.WriteLine("\nПопробуй ещё раз... 🥺\n");
+                }
+            }
+
+            Console.WriteLine("\nНажмите любую клавишу для выхода...");
+            Console.ReadKey();
+        }
+
+        class Player
+        {
+            public string Name { get; private set; }
+
+            public Player(string name)
+            {
+                Name = name;
+            }
+
+            public void GiveKiss()
+            {
+                Console.WriteLine("\n✿♡‿♡ Неверно, но я всё равно тебя люблю!");
+                Console.WriteLine("Ты мой самый лучший программист в мире <3");
+            }
+
+            public void GiveBigHug()
+            {
+                Console.WriteLine("\n❤️❤️❤️ ПРАВИЛЬНО! ❤️❤️❤️");
+                Console.WriteLine("Ты угадал моё любимое число - 7,");
+                Console.WriteLine("как и наши шансы на счастье! 💖");
+                Console.WriteLine("Обнимашки! (｡◕‿◕｡) С тобой даже баги кажутся милыми");
+            }
+        }
+    }
+}
