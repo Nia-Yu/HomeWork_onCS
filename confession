@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CsRealLearning
 {
@@ -9,10 +10,8 @@ namespace CsRealLearning
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.ForegroundColor = ConsoleColor.Magenta;
 
-            // Create player instance
             Player husband = new Player("Alex");
 
-            // Welcome message
             Console.WriteLine($"Hi, {husband.Name}! ❤️");
             Console.WriteLine("Let's play a cute little game:\n");
 
@@ -27,7 +26,7 @@ namespace CsRealLearning
                 if (answer == "7")
                 {
                     husband.GiveBigHug();
-                    guessed = true; // Exit loop
+                    guessed = true;
                 }
                 else
                 {
@@ -39,29 +38,42 @@ namespace CsRealLearning
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
         }
+    }
 
-        class Player
+    class Player
+    {
+        private Random random = new Random();
+        
+        public string Name { get; private set; }
+
+        public Player(string name)
         {
-            public string Name { get; private set; }
+            Name = name;
+        }
 
-            public Player(string name)
-            {
-                Name = name;
-            }
+        public void GiveKiss()
+        {
+            Console.WriteLine("\n✿♡‿♡ Not quite, but I still love you!");
+            Console.WriteLine("You're the best programmer in my world <3");
+        }
 
-            public void GiveKiss()
+        public void GiveBigHug()
+        {
+            List<string> compliments = new List<string>
             {
-                Console.WriteLine("\n✿♡‿♡ Not quite, but I still love you!");
-                Console.WriteLine("You're the best programmer in my world <3");
-            }
+                "which is just as perfect as us being together! 💖",
+                "just like the chances of you fixing my code with love! 💻💖",
+                "because 7 is lucky, and so am I with you! 💖",
+                "the same way our love never needs a reason! 💖",
+                "like how you still love me even when I break your code! 💖"
+            };
 
-            public void GiveBigHug()
-            {
-                Console.WriteLine("\n❤️❤️❤️ CORRECT! ❤️❤️❤️");
-                Console.WriteLine("You guessed my favorite number — 7,");
-                Console.WriteLine("because 7 is lucky, and so am I with you! 💖");
-                Console.WriteLine("Big hug! (｡◕‿◕｡) Even bugs feel cute with you");
-            }
+            string randomCompliment = compliments[random.Next(compliments.Count)];
+
+            Console.WriteLine("\n❤️❤️❤️ CORRECT! ❤️❤️❤️");
+            Console.WriteLine("You guessed my favorite number — 7,");
+            Console.WriteLine(randomCompliment);
+            Console.WriteLine("Big hug! (｡◕‿◕｡) Even bugs feel cute with you");
         }
     }
 }
