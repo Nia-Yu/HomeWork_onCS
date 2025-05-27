@@ -59,7 +59,7 @@ namespace CsRealLearning
             {
                 Console.WriteLine("\n❤️❤️❤️ CORRECT! ❤️❤️❤️");
                 Console.WriteLine("You guessed my favorite number — 7,");
-                Console.WriteLine("just like our chances of being happy together! 💖");
+                Console.WriteLine("which is just as perfect as us being together! 💖");
                 Console.WriteLine("Big hug! (｡◕‿◕｡) Even bugs feel cute with you");
             }
         }
