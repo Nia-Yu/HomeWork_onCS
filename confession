@@ -9,34 +9,34 @@ namespace CsRealLearning
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.ForegroundColor = ConsoleColor.Magenta;
 
-            // Создаем экземпляр игрока
-            Player husband = new Player("Алекс");
+            // Create player instance
+            Player husband = new Player("Alex");
 
-            // Приветствуем пользователя
-            Console.WriteLine($"Привет, {husband.Name}! ❤️");
-            Console.WriteLine("Давай сыграем в милую игру:\n");
+            // Welcome message
+            Console.WriteLine($"Hi, {husband.Name}! ❤️");
+            Console.WriteLine("Let's play a cute little game:\n");
 
             string answer;
             bool guessed = false;
 
             while (!guessed)
             {
-                Console.WriteLine("Какое число я загадала? (1-5) 💭");
+                Console.WriteLine("What number did I guess? (1-5) 💭");
                 answer = Console.ReadLine();
 
                 if (answer == "7")
                 {
                     husband.GiveBigHug();
-                    guessed = true; // Выходим из цикла
+                    guessed = true; // Exit loop
                 }
                 else
                 {
                     husband.GiveKiss();
-                    Console.WriteLine("\nПопробуй ещё раз... 🥺\n");
+                    Console.WriteLine("\nTry again... 🥺\n");
                 }
             }
 
-            Console.WriteLine("\nНажмите любую клавишу для выхода...");
+            Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
         }
 
@@ -51,16 +51,16 @@ namespace CsRealLearning
 
             public void GiveKiss()
             {
-                Console.WriteLine("\n✿♡‿♡ Неверно, но я всё равно тебя люблю!");
-                Console.WriteLine("Ты мой самый лучший программист в мире <3");
+                Console.WriteLine("\n✿♡‿♡ Not quite, but I still love you!");
+                Console.WriteLine("You're the best programmer in my world <3");
             }
 
             public void GiveBigHug()
             {
-                Console.WriteLine("\n❤️❤️❤️ ПРАВИЛЬНО! ❤️❤️❤️");
-                Console.WriteLine("Ты угадал моё любимое число - 7,");
-                Console.WriteLine("как и наши шансы на счастье! 💖");
-                Console.WriteLine("Обнимашки! (｡◕‿◕｡) С тобой даже баги кажутся милыми");
+                Console.WriteLine("\n❤️❤️❤️ CORRECT! ❤️❤️❤️");
+                Console.WriteLine("You guessed my favorite number — 7,");
+                Console.WriteLine("just like our chances of being happy together! 💖");
+                Console.WriteLine("Big hug! (｡◕‿◕｡) Even bugs feel cute with you");
             }
         }
     }
